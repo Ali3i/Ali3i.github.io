@@ -68,10 +68,11 @@
     .icon{width:32px; height:32px; display:block}
     .badge{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid var(--stroke); background:#0c1116}
     .footer{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:26px; color:var(--muted); font-size:14px}
-    form {margin-top:32px; display:flex; flex-direction:column; gap:12px;}
-    textarea {width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke); background:#0c1116; color:var(--text); resize:vertical;}
-    button {padding:12px; border-radius:10px; background:var(--brand); color:#fff; border:none; cursor:pointer; font-weight:600;}
-    button:hover {background:var(--brand-2);}
+    form {margin-top:32px; display:flex; flex-direction:column; gap:12px;} 
+    textarea {width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke); background:#0c1116; color:var(--text); resize:vertical;} 
+    button {padding:12px; border-radius:10px; background:var(--brand); color:#fff; border:none; cursor:pointer; font-weight:600;} 
+    button:hover {background:var(--brand-2);} 
+    input[type="text"], input[type="email"] {width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke); background:#0c1116; color:var(--text);} 
     @media (max-width:560px){ h1{font-size:24px} .logo{width:64px; height:64px} .logo svg{width:40px; height:40px}}
   </style>
 </head>
@@ -100,6 +101,7 @@
         </div>
       </header>
 
+      <!-- Social icons (no usernames shown) -->
       <div class="links" id="links">
         <a class="link" href="https://snapchat.com/add/a.e25i" target="_blank" rel="noopener" aria-label="Snapchat" title="Snapchat">
           <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
@@ -123,11 +125,17 @@
         </a>
       </div>
 
+      <!-- Email message form -->
       <form action="https://formsubmit.co/Ali_Alessa@outlook.sa" method="POST">
         <h2 style="margin:24px 0 4px">Leave me a message</h2>
-        <textarea name="message" rows="4" placeholder="Write anything..." required></textarea>
-        <input type="hidden" name="_next" value="https://Ali3i.github.io">
+        <input type="text" name="name" placeholder="Name (optional)">
+        <input type="text" name="contact" placeholder="Contact (optional: phone or email)">
+        <textarea name="message" rows="4" placeholder="Your message" required></textarea>
         <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="New message from ALI ALESSA site">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://Ali3i.github.io/?sent=1">
+        <input type="text" name="_honey" style="display:none">
         <button type="submit">Send Message</button>
       </form>
 
