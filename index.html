@@ -72,8 +72,8 @@
     textarea {width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke); background:#0c1116; color:var(--text); resize:vertical;} 
     button {padding:12px; border-radius:10px; background:var(--brand); color:#fff; border:none; cursor:pointer; font-weight:600;} 
     button:hover {background:var(--brand-2);} 
-    input[type="text"], input[type="email"] {width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke); background:#0c1116; color:var(--text);} 
     @media (max-width:560px){ h1{font-size:24px} .logo{width:64px; height:64px} .logo svg{width:40px; height:40px}}
+  input[type="text"], input[type="email"] {width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke); background:#0c1116; color:var(--text);} 
   </style>
 </head>
 <body>
@@ -83,6 +83,7 @@
       <header>
         <div class="brand">
           <div class="logo" aria-label="Ali logo">
+            <!-- Restored inline SVG logo -->
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img">
               <defs>
                 <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
@@ -101,10 +102,10 @@
         </div>
       </header>
 
-      <!-- Social icons (no usernames shown) -->
+      <!-- Restored social icons (clickable logos only) -->
       <div class="links" id="links">
-        <a class="link" href="https://snapchat.com/add/a.e25i" target="_blank" rel="noopener" aria-label="Snapchat" title="Snapchat">
-            <a class="link" href="mailto:Ali_Alessa@outlook.sa" target="_blank" rel="noopener" aria-label="Email" title="Email">
+        
+        <a class="link" href="mailto:Ali_Alessa@outlook.sa" target="_blank" rel="noopener" aria-label="Email" title="Email">
           <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
             <path fill="#4f8cff" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 3.8-8 5-8-5V6l8 5 8-5v1.8Z"/>
           </svg>
@@ -121,16 +122,18 @@
         </a>
       </div>
 
-      <!-- Email message form -->
+      <!-- Message form -->
       <form action="https://formsubmit.co/Ali_Alessa@outlook.sa" method="POST">
         <h2 style="margin:24px 0 4px">Leave me a message</h2>
         <input type="text" name="name" placeholder="Name (optional)">
         <input type="text" name="contact" placeholder="Contact (optional: phone or email)">
         <textarea name="message" rows="4" placeholder="Your message" required></textarea>
+        <!-- FormSubmit options -->
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_subject" value="New message from ALI ALESSA site">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" value="https://Ali3i.github.io/?sent=1">
+        <!-- simple honeypot field -->
         <input type="text" name="_honey" style="display:none">
         <button type="submit">Send Message</button>
       </form>
