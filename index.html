@@ -50,12 +50,8 @@
       border-radius: calc(var(--radius) - 6px);
       overflow: hidden;
       border: 1px solid var(--stroke);
-      background: #0c1116;
-    }
-    .hero img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      filter: saturate(0.8) hue-rotate(-20deg) brightness(0.8);
-      transform: scale(1.02);
+      background: #0c1116 url('https://your-image-link.com/header.jpg') center/cover no-repeat;
+      filter: saturate(0.85) hue-rotate(-10deg) brightness(0.88);
     }
     .hero::after{
       content: ""; position:absolute; inset:0;
@@ -83,13 +79,22 @@
     button {padding:12px; border-radius:10px; background:var(--brand); color:#fff; border:none; cursor:pointer; font-weight:600;} 
     button:hover {background:var(--brand-2);} 
     @media (max-width:560px){ h1{font-size:24px} }
+    input[type="text"], input[type="email"], textarea {
+      width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke);
+      background:#0c1116; color:var(--text);
+    }
+    ::placeholder{ color: var(--muted); opacity: .9 }
+    input:-webkit-autofill{
+      -webkit-box-shadow: 0 0 0px 1000px #0c1116 inset;
+      -webkit-text-fill-color: var(--text);
+      caret-color: var(--text);
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
     <section class="card">
       <div class="hero" aria-label="Header image">
-        <img src="21e06ccb-46ee-429c-ab72-75d0990ac54c.jpg" alt="Saudi Logo" />
         <div class="hero-overlay">
           <div>
             <div class="hero-title">Ali Alessa</div>
