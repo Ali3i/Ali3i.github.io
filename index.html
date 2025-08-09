@@ -1,120 +1,181 @@
-<!doctype html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALI AHMED ALESSA</title>
-  <meta name="description" content="Personal Website" />
-  <link rel="canonical" href="https://ali3i.github.io/" />
-  <meta property="og:title" content="ALI AHMED ALESSA" />
-  <meta property="og:description" content="Personal Website" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ali3i.github.io/" />
-  <meta name="theme-color" content="#0b0f14" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0b0f14; --surface:#0f141b; --stroke:#1b2430; --text:#e8eef5; --muted:#9aa6b2;
-      --brand:#4f8cff; --brand-2:#8b5cf6; --accent:#22d3ee; --radius:22px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:"IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      background:radial-gradient(1000px 500px at 80% -10%, rgba(79,140,255,0.18), transparent 50%),
-                 radial-gradient(800px 500px at 10% -20%, rgba(139,92,246,0.16), transparent 50%),
-                 var(--bg);
-      display:flex; align-items:center; justify-content:center; padding:28px;
-    }
-    .wrap{width:min(980px, 100%);}  
-    .card{
-      position:relative; background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), var(--surface);
-      border:1px solid var(--stroke); border-radius:var(--radius);
-      padding:28px; box-shadow:0 16px 60px rgba(0,0,0,0.45);
-    }
-    .header{
-      display:flex; align-items:center; gap:20px; margin-bottom:20px;
-    }
-    .header h1{
-      font-size:2.8rem;
-      margin:0;
-      font-weight:700;
-    }
-    .header p{
-      margin:4px 0 0;
-      color:var(--muted);
-    }
-    .links{
-      display:flex; gap:24px; justify-content:center; margin-top:26px;
-    }
-    .link{
-      width:64px; height:64px;
-      display:flex; align-items:center; justify-content:center;
-      border:1px solid var(--stroke); border-radius:14px; background:#0c1116; text-decoration:none; color:var(--text);
-      transition:transform .08s ease, border-color .2s, background .2s, box-shadow .2s;
-    }
-    .link:hover{
-      transform:translateY(-3px); border-color:#2a3340; background:#0d1319; box-shadow:0 6px 18px rgba(0,0,0,.25)
-    }
-    .icon{width:32px; height:32px; display:block}
-    form {margin-top:32px; display:flex; flex-direction:column; gap:12px;} 
-    input[type="text"], input[type="email"], textarea {
-      width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke);
-      background:#0c1116; color:var(--text);
-    }
-    textarea{resize:vertical}
-    ::placeholder{ color:var(--muted); opacity:.9 }
-    button {padding:12px; border-radius:10px; background:var(--brand); color:#fff; border:none; cursor:pointer; font-weight:600;} 
-    button:hover {background:var(--brand-2);} 
-    .footer{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:26px; color:var(--muted); font-size:14px}
-    .toast{display:none;margin-top:16px;padding:12px 14px;border:1px solid #244a2b;border-radius:12px;background:rgba(34,197,94,.08);color:#a7f3d0;font-size:14px}
-    .toast.show{display:block}
-  </style>
-</head>
-<body>
-  <main class="wrap">
-    <section class="card">
-      <div class="header">
-        <div>
-          <h1>ALI AHMED ALESSA</h1>
-          <p>Personal Website</p>
-        </div>
-      </div>
-      <div class="links" id="links">
-        <a class="link" href="mailto:contact@alialessa.info" aria-label="Email"><svg class="icon" viewBox="0 0 24 24"><path fill="#4f8cff" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 3.8-8 5-8-5V6l8 5 8-5v1.8Z"/></svg></a>
-        <a class="link" href="https://wa.me/966507254625" aria-label="WhatsApp"><svg class="icon" viewBox="0 0 24 24"><path fill="#25D366" d="M12 2a10 10 0 0 0-8.7 14.8L2 22l5.4-1.3A10 10 0 1 0 12 2Zm0 2a8 8 0 1 1-3.9 15l-.3-.1l-2.6.6l.6-2.5l-.1-.3A8 8 0 0 1 12 4Zm-3.2 4.5c.2 0 .5 0 .8.6c.3.6 1 1.5 1.1 1.6c.1.1.2.3.1.5c-.1.2-.2.3-.4.5c-.2.2-.3.3-.1.6c.2.3.8 1.3 1.9 2.1c1.3.9 2.3 1.2 2.6 1c.3-.2.4-.5.6-.8c.2-.3.3-.4.6-.3c.2.1 1.6.8 1.9.9c.3.1.5.3.5.5c0 .2.1 1.2-.7 1.9c-.7.7-1.6.8-2.7.7c-1.2-.1-2.6-.7-4.2-1.7c-1.6-1-2.8-3-3.2-3.5c-.4-.6-.8-1.6-.9-2.1c-.1-.5 0-1 .2-1.3c.2-.3.6-.5.8-.6Z"/></svg></a>
-        <a class="link" href="https://www.linkedin.com/in/ali-alessa-313a85170/" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24"><path fill="#0A66C2" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.6h.1c.5-.9 1.7-1.9 3.5-1.9C20 8.7 21 11 21 14.2V21h-4v-6c0-1.5 0-3.4-2.1-3.4c-2.1 0-2.4 1.6-2.4 3.3V21H9V9Z"/></svg></a>
-      </div>
-      <form action="https://formsubmit.co/contact@alialessa.info" method="POST">
-        <h2>Leave me a message</h2>
-        <input type="text" name="name" placeholder="Name (optional)">
-        <input type="text" name="contact" placeholder="Contact (optional: phone or email)">
-        <textarea name="message" rows="4" placeholder="Your message" required></textarea>
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="New message from ALI AHMED ALESSA site">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://alialessa.info/?sent=1">
-        <input type="text" name="_honey" style="display:none">
-        <button type="submit">Send</button>
-      </form>
-      <div id="sentToast" class="toast" role="status" aria-live="polite">Your message has been sent. Thank you!</div>
-      <div class="footer">
-        <small>© <span id="year"></span> ALI AHMED ALESSA</small>
-        <span class="badge">Palette: #4f8cff · #8b5cf6 · #22d3ee</span>
-      </div>
-    </section>
-  </main>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const qp = new URLSearchParams(location.search);
-    if (qp.get('sent') === '1') {
-      const toast = document.getElementById('sentToast');
-      if (toast) toast.classList.add('show');
-      history.replaceState(null, '', location.pathname);
-    }
-  </script>
-</body>
-</html>
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/index.html b/index.html
+index 9080cea665fe224bdb7a8b2fdfdae52279371d01..2b112706280ed30db6a35ad34acbd56e9af1e946 100644
+--- a/index.html
++++ b/index.html
+@@ -1,120 +1,81 @@
+ <!doctype html>
+ <html lang="en" dir="ltr">
+ <head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>ALI AHMED ALESSA</title>
+   <meta name="description" content="Personal Website" />
+   <link rel="canonical" href="https://ali3i.github.io/" />
+   <meta property="og:title" content="ALI AHMED ALESSA" />
+   <meta property="og:description" content="Personal Website" />
+   <meta property="og:type" content="website" />
+   <meta property="og:url" content="https://ali3i.github.io/" />
+-  <meta name="theme-color" content="#0b0f14" />
+-  <link rel="preconnect" href="https://fonts.googleapis.com">
+-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+-  <style>
+-    :root{
+-      --bg:#0b0f14; --surface:#0f141b; --stroke:#1b2430; --text:#e8eef5; --muted:#9aa6b2;
+-      --brand:#4f8cff; --brand-2:#8b5cf6; --accent:#22d3ee; --radius:22px;
+-    }
+-    *{box-sizing:border-box}
+-    html,body{height:100%}
+-    body{
+-      margin:0; font-family:"IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+-      color:var(--text);
+-      background:radial-gradient(1000px 500px at 80% -10%, rgba(79,140,255,0.18), transparent 50%),
+-                 radial-gradient(800px 500px at 10% -20%, rgba(139,92,246,0.16), transparent 50%),
+-                 var(--bg);
+-      display:flex; align-items:center; justify-content:center; padding:28px;
+-    }
+-    .wrap{width:min(980px, 100%);}  
+-    .card{
+-      position:relative; background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), var(--surface);
+-      border:1px solid var(--stroke); border-radius:var(--radius);
+-      padding:28px; box-shadow:0 16px 60px rgba(0,0,0,0.45);
+-    }
+-    .header{
+-      display:flex; align-items:center; gap:20px; margin-bottom:20px;
+-    }
+-    .header h1{
+-      font-size:2.8rem;
+-      margin:0;
+-      font-weight:700;
+-    }
+-    .header p{
+-      margin:4px 0 0;
+-      color:var(--muted);
+-    }
+-    .links{
+-      display:flex; gap:24px; justify-content:center; margin-top:26px;
+-    }
+-    .link{
+-      width:64px; height:64px;
+-      display:flex; align-items:center; justify-content:center;
+-      border:1px solid var(--stroke); border-radius:14px; background:#0c1116; text-decoration:none; color:var(--text);
+-      transition:transform .08s ease, border-color .2s, background .2s, box-shadow .2s;
+-    }
+-    .link:hover{
+-      transform:translateY(-3px); border-color:#2a3340; background:#0d1319; box-shadow:0 6px 18px rgba(0,0,0,.25)
+-    }
+-    .icon{width:32px; height:32px; display:block}
+-    form {margin-top:32px; display:flex; flex-direction:column; gap:12px;} 
+-    input[type="text"], input[type="email"], textarea {
+-      width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke);
+-      background:#0c1116; color:var(--text);
++  <meta name="theme-color" content="#6366f1" />
++  <link rel="preconnect" href="https://fonts.googleapis.com" />
++  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
++  <script src="https://cdn.tailwindcss.com"></script>
++  <script>
++    tailwind.config = {
++      theme: {
++        extend: {
++          colors: {
++            primary: '#6366f1',
++            accent: '#0ea5e9',
++          },
++        },
++      },
+     }
+-    textarea{resize:vertical}
+-    ::placeholder{ color:var(--muted); opacity:.9 }
+-    button {padding:12px; border-radius:10px; background:var(--brand); color:#fff; border:none; cursor:pointer; font-weight:600;} 
+-    button:hover {background:var(--brand-2);} 
+-    .footer{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:26px; color:var(--muted); font-size:14px}
+-    .toast{display:none;margin-top:16px;padding:12px 14px;border:1px solid #244a2b;border-radius:12px;background:rgba(34,197,94,.08);color:#a7f3d0;font-size:14px}
+-    .toast.show{display:block}
+-  </style>
++  </script>
+ </head>
+-<body>
+-  <main class="wrap">
+-    <section class="card">
+-      <div class="header">
+-        <div>
+-          <h1>ALI AHMED ALESSA</h1>
+-          <p>Personal Website</p>
+-        </div>
++<body class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 font-[Inter]">
++  <main class="flex flex-col items-center justify-center min-h-screen p-6">
++    <section class="w-full max-w-xl bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-xl p-8">
++      <header class="flex flex-col items-center text-center mb-8">
++        <h1 class="text-4xl font-bold tracking-tight">ALI AHMED ALESSA</h1>
++        <p class="text-lg text-gray-400 mt-1">Personal Website</p>
++      </header>
++      <div id="links" class="flex justify-center gap-6 mb-8">
++        <a class="p-4 rounded-xl bg-gray-700/60 hover:bg-gray-700 border border-gray-600 transition" href="mailto:contact@alialessa.info" aria-label="Email">
++          <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 3.8-8 5-8-5V6l8 5 8-5v1.8Z"/></svg>
++        </a>
++        <a class="p-4 rounded-xl bg-gray-700/60 hover:bg-gray-700 border border-gray-600 transition" href="https://wa.me/966507254625" aria-label="WhatsApp">
++          <svg class="w-6 h-6 text-[#25D366]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.7 14.8L2 22l5.4-1.3A10 10 0 1 0 12 2Zm0 2a8 8 0 1 1-3.9 15l-.3-.1l-2.6.6l.6-2.5l-.1-.3A8 8 0 0 1 12 4Zm-3.2 4.5c.2 0 .5 0 .8.6c.3.6 1 1.5 1.1 1.6c.1.1.2.3.1.5c-.1.2-.2.3-.4.5c-.2.2-.3.3-.1.6c.2.3.8 1.3 1.9 2.1c1.3.9 2.3 1.2 2.6 1c.3-.2.4-.5.6-.8c.2-.3.3-.4.6-.3c.2.1 1.6.8 1.9.9c.3.1.5.3.5.5c0 .2.1 1.2-.7 1.9c-.7.7-1.6.8-2.7.7c-1.2-.1-2.6-.7-4.2-1.7c-1.6-1-2.8-3-3.2-3.5c-.4-.6-.8-1.6-.9-2.1c-.1-.5 0-1 .2-1.3c.2-.3.6-.5.8-.6Z"/></svg>
++        </a>
++        <a class="p-4 rounded-xl bg-gray-700/60 hover:bg-gray-700 border border-gray-600 transition" href="https://www.linkedin.com/in/ali-alessa-313a85170/" aria-label="LinkedIn">
++          <svg class="w-6 h-6 text-[#0A66C2]" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.6h.1c.5-.9 1.7-1.9 3.5-1.9C20 8.7 21 11 21 14.2V21h-4v-6c0-1.5 0-3.4-2.1-3.4c-2.1 0-2.4 1.6-2.4 3.3V21H9V9Z"/></svg>
++        </a>
+       </div>
+-      <div class="links" id="links">
+-        <a class="link" href="mailto:contact@alialessa.info" aria-label="Email"><svg class="icon" viewBox="0 0 24 24"><path fill="#4f8cff" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 3.8-8 5-8-5V6l8 5 8-5v1.8Z"/></svg></a>
+-        <a class="link" href="https://wa.me/966507254625" aria-label="WhatsApp"><svg class="icon" viewBox="0 0 24 24"><path fill="#25D366" d="M12 2a10 10 0 0 0-8.7 14.8L2 22l5.4-1.3A10 10 0 1 0 12 2Zm0 2a8 8 0 1 1-3.9 15l-.3-.1l-2.6.6l.6-2.5l-.1-.3A8 8 0 0 1 12 4Zm-3.2 4.5c.2 0 .5 0 .8.6c.3.6 1 1.5 1.1 1.6c.1.1.2.3.1.5c-.1.2-.2.3-.4.5c-.2.2-.3.3-.1.6c.2.3.8 1.3 1.9 2.1c1.3.9 2.3 1.2 2.6 1c.3-.2.4-.5.6-.8c.2-.3.3-.4.6-.3c.2.1 1.6.8 1.9.9c.3.1.5.3.5.5c0 .2.1 1.2-.7 1.9c-.7.7-1.6.8-2.7.7c-1.2-.1-2.6-.7-4.2-1.7c-1.6-1-2.8-3-3.2-3.5c-.4-.6-.8-1.6-.9-2.1c-.1-.5 0-1 .2-1.3c.2-.3.6-.5.8-.6Z"/></svg></a>
+-        <a class="link" href="https://www.linkedin.com/in/ali-alessa-313a85170/" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24"><path fill="#0A66C2" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.6h.1c.5-.9 1.7-1.9 3.5-1.9C20 8.7 21 11 21 14.2V21h-4v-6c0-1.5 0-3.4-2.1-3.4c-2.1 0-2.4 1.6-2.4 3.3V21H9V9Z"/></svg></a>
+-      </div>
+-      <form action="https://formsubmit.co/contact@alialessa.info" method="POST">
+-        <h2>Leave me a message</h2>
+-        <input type="text" name="name" placeholder="Name (optional)">
+-        <input type="text" name="contact" placeholder="Contact (optional: phone or email)">
+-        <textarea name="message" rows="4" placeholder="Your message" required></textarea>
+-        <input type="hidden" name="_captcha" value="false">
+-        <input type="hidden" name="_subject" value="New message from ALI AHMED ALESSA site">
+-        <input type="hidden" name="_template" value="table">
+-        <input type="hidden" name="_next" value="https://alialessa.info/?sent=1">
+-        <input type="text" name="_honey" style="display:none">
+-        <button type="submit">Send</button>
++      <form action="https://formsubmit.co/contact@alialessa.info" method="POST" class="space-y-4">
++        <h2 class="text-2xl font-semibold text-center">Leave me a message</h2>
++        <input class="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" type="text" name="name" placeholder="Name (optional)" />
++        <input class="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" type="text" name="contact" placeholder="Contact (optional: phone or email)" />
++        <textarea class="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" name="message" rows="4" placeholder="Your message" required></textarea>
++        <input type="hidden" name="_captcha" value="false" />
++        <input type="hidden" name="_subject" value="New message from ALI AHMED ALESSA site" />
++        <input type="hidden" name="_template" value="table" />
++        <input type="hidden" name="_next" value="https://alialessa.info/?sent=1" />
++        <input type="text" name="_honey" class="hidden" />
++        <button type="submit" class="w-full py-3 rounded-lg bg-primary hover:bg-accent transition text-white font-semibold">Send</button>
+       </form>
+-      <div id="sentToast" class="toast" role="status" aria-live="polite">Your message has been sent. Thank you!</div>
+-      <div class="footer">
+-        <small>© <span id="year"></span> ALI AHMED ALESSA</small>
+-        <span class="badge">Palette: #4f8cff · #8b5cf6 · #22d3ee</span>
++      <div id="sentToast" class="hidden mt-4 px-4 py-2 rounded-lg border border-emerald-700 bg-emerald-900/30 text-emerald-200 text-sm" role="status" aria-live="polite">
++        Your message has been sent. Thank you!
+       </div>
++      <footer class="flex justify-between items-center text-xs text-gray-400 mt-8">
++        <small>© <span id="year"></span> ALI AHMED ALESSA</small>
++        <span class="px-2 py-1 rounded-full bg-gray-700/50">Palette: #6366f1 · #8b5cf6 · #0ea5e9</span>
++      </footer>
+     </section>
+   </main>
+   <script>
+     document.getElementById('year').textContent = new Date().getFullYear();
+     const qp = new URLSearchParams(location.search);
+     if (qp.get('sent') === '1') {
+       const toast = document.getElementById('sentToast');
+-      if (toast) toast.classList.add('show');
++      if (toast) toast.classList.remove('hidden');
+       history.replaceState(null, '', location.pathname);
+     }
+   </script>
+ </body>
+ </html>
++
+ 
+EOF
+)
