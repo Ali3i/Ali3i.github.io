@@ -16,6 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://formsubmit.co">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#0b0f14; --surface:#0f141b; --stroke:#1b2430; --text:#e8eef5; --muted:#9aa6b2;
@@ -24,7 +25,7 @@
     *{box-sizing:border-box; margin:0; padding:0;}
     html{scroll-behavior:smooth;}
     body{
-      font-family:"IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:"IBM Plex Sans", "Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text); background:var(--bg); line-height:1.6;
       background:radial-gradient(1200px 600px at 80% -10%, rgba(79,140,255,0.15), transparent 60%),
                  radial-gradient(1000px 600px at 10% -20%, rgba(139,92,246,0.12), transparent 60%),
@@ -40,6 +41,7 @@
       background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), var(--surface);
       border:1px solid var(--stroke); border-radius:var(--radius);
       padding:48px; box-shadow:0 16px 60px rgba(0,0,0,0.45);
+      position:relative;
     }
 
     .header{
@@ -65,6 +67,33 @@
 
     .subtitle{
       color:var(--muted); font-size:1rem; margin-top:8px;
+    }
+
+    .lang-toggle{
+      position:absolute; top:24px; right:24px;
+      display:flex; gap:8px; background:var(--surface);
+      border:1px solid var(--stroke); border-radius:10px;
+      padding:6px;
+    }
+
+    .lang-btn{
+      padding:8px 16px; border:none; border-radius:8px;
+      background:transparent; color:var(--muted);
+      cursor:pointer; font-weight:600; font-size:0.9rem;
+      transition:all .2s; font-family:inherit;
+    }
+
+    .lang-btn.active{
+      background:linear-gradient(135deg, var(--brand), var(--accent));
+      color:#fff;
+    }
+
+    .lang-btn:hover:not(.active){
+      color:var(--text); background:rgba(79,140,255,0.1);
+    }
+
+    [dir="rtl"] .lang-toggle{
+      right:auto; left:24px;
     }
 
     .qr-section{
@@ -190,28 +219,35 @@
     .submit-btn:active{transform:translateY(0);}
 
     @media(max-width:768px){
-      .card{padding:32px 24px;}
+      .card{padding:32px 24px; padding-top:70px;}
       h1{font-size:2rem;}
       .qr-code img{width:180px; height:180px;}
       .message-form{padding:24px 20px;}
+      .lang-toggle{top:16px; right:16px; scale:0.95;}
+      [dir="rtl"] .lang-toggle{right:auto; left:16px;}
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+        <button class="lang-btn" onclick="switchLang('ar')">ع</button>
+      </div>
+
       <div class="header">
         <div class="logo"></div>
         <h1>ALI ALESSA</h1>
-        <p class="subtitle">Contact Information</p>
+        <p class="subtitle" data-en="Contact Information" data-ar="معلومات التواصل">Contact Information</p>
       </div>
 
       <div class="qr-section">
-        <h2>Scan to Save Contact</h2>
+        <h2 data-en="Scan to Save Contact" data-ar="امسح لحفظ جهة الاتصال">Scan to Save Contact</h2>
         <div class="qr-code">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AFN:Ali%20Alessa%0ATEL;TYPE=CELL:+966507254625%0AEMAIL:contact@alialessa.info%0AURL:https://alialessa.info%0AEND:VCARD" alt="QR Code - Contact Information" />
         </div>
-        <p class="qr-label">Scan with your camera to add contact</p>
+        <p class="qr-label" data-en="Scan with your camera to add contact" data-ar="امسح بالكاميرا لإضافة جهة الاتصال">Scan with your camera to add contact</p>
       </div>
 
       <div class="contact-item">
@@ -221,7 +257,7 @@
           </svg>
         </div>
         <div class="contact-item-content">
-          <div class="label">Email</div>
+          <div class="label" data-en="Email" data-ar="البريد الإلكتروني">Email</div>
           <a href="mailto:contact@alialessa.info">contact@alialessa.info</a>
         </div>
       </div>
@@ -233,34 +269,34 @@
           </svg>
         </div>
         <div class="contact-item-content">
-          <div class="label">Phone</div>
+          <div class="label" data-en="Phone" data-ar="الهاتف">Phone</div>
           <a href="tel:+966507254625">+966 50 725 4625</a>
         </div>
       </div>
 
       <div class="message-form">
-        <h2>Send Me a Message</h2>
+        <h2 data-en="Send Me a Message" data-ar="أرسل لي رسالة">Send Me a Message</h2>
         <form action="https://formsubmit.co/contact@alialessa.info" method="POST">
           <input type="hidden" name="_subject" value="New message from alialessa.info">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
 
           <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required placeholder="Your name">
+            <label for="name" data-en="Name" data-ar="الاسم">Name</label>
+            <input type="text" id="name" name="name" required data-placeholder-en="Your name" data-placeholder-ar="اسمك" placeholder="Your name">
           </div>
 
           <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required placeholder="your@email.com">
+            <label for="email" data-en="Email" data-ar="البريد الإلكتروني">Email</label>
+            <input type="email" id="email" name="email" required data-placeholder-en="your@email.com" data-placeholder-ar="بريدك@الإلكتروني.com" placeholder="your@email.com">
           </div>
 
           <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" required placeholder="Your message..."></textarea>
+            <label for="message" data-en="Message" data-ar="الرسالة">Message</label>
+            <textarea id="message" name="message" required data-placeholder-en="Your message..." data-placeholder-ar="رسالتك..." placeholder="Your message..."></textarea>
           </div>
 
-          <button type="submit" class="submit-btn">Send Message</button>
+          <button type="submit" class="submit-btn" data-en="Send Message" data-ar="إرسال الرسالة">Send Message</button>
         </form>
       </div>
 
@@ -284,6 +320,55 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Language switching functionality
+    function switchLang(lang) {
+      const html = document.documentElement;
+      const allElements = document.querySelectorAll('[data-en]');
+      const allPlaceholders = document.querySelectorAll('[data-placeholder-en]');
+      const langButtons = document.querySelectorAll('.lang-btn');
+
+      // Update direction and lang attribute
+      if (lang === 'ar') {
+        html.setAttribute('dir', 'rtl');
+        html.setAttribute('lang', 'ar');
+      } else {
+        html.setAttribute('dir', 'ltr');
+        html.setAttribute('lang', 'en');
+      }
+
+      // Update all text content
+      allElements.forEach(el => {
+        if (el.getAttribute('data-' + lang)) {
+          el.textContent = el.getAttribute('data-' + lang);
+        }
+      });
+
+      // Update all placeholders
+      allPlaceholders.forEach(el => {
+        if (el.getAttribute('data-placeholder-' + lang)) {
+          el.placeholder = el.getAttribute('data-placeholder-' + lang);
+        }
+      });
+
+      // Update active button
+      langButtons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // Save preference
+      localStorage.setItem('preferred-lang', lang);
+    }
+
+    // Load saved language preference
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('preferred-lang');
+      if (savedLang === 'ar') {
+        const arBtn = document.querySelector('.lang-btn:nth-child(2)');
+        arBtn.click();
+      }
+    });
   </script>
 </body>
 </html>
