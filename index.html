@@ -22,6 +22,7 @@
       --brand:#4f8cff; --brand-2:#8b5cf6; --accent:#22d3ee; --success:#10b981; --radius:16px;
     }
     *{box-sizing:border-box; margin:0; padding:0;}
+    #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
     html{scroll-behavior:smooth;}
     body{
       font-family:"IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -34,7 +35,7 @@
       padding:24px;
     }
 
-    .container{max-width:700px; width:100%;}
+    .container{max-width:700px; width:100%; position:relative; z-index:1;}
 
     .card{
       background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), var(--surface);
@@ -198,6 +199,7 @@
   </style>
 </head>
 <body>
+  <canvas id="bg-canvas"></canvas>
   <div class="container">
     <div class="card">
       <div class="header">
@@ -284,6 +286,75 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    (function(){
+      var canvas = document.getElementById('bg-canvas');
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var colors = ['rgba(79,140,255,','rgba(139,92,246,','rgba(34,211,238,'];
+      var count = 60;
+      var connectDist = 140;
+
+      function resize(){
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function Particle(){
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.r = Math.random() * 2.5 + 1;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.alpha = Math.random() * 0.5 + 0.3;
+      }
+
+      for(var i = 0; i < count; i++){
+        particles.push(new Particle());
+      }
+
+      function animate(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for(var i = 0; i < particles.length; i++){
+          var p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if(p.x < 0) p.x = canvas.width;
+          if(p.x > canvas.width) p.x = 0;
+          if(p.y < 0) p.y = canvas.height;
+          if(p.y > canvas.height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color + p.alpha + ')';
+          ctx.fill();
+
+          for(var j = i + 1; j < particles.length; j++){
+            var p2 = particles[j];
+            var dx = p.x - p2.x;
+            var dy = p.y - p2.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if(dist < connectDist){
+              var opacity = (1 - dist / connectDist) * 0.15;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = p.color + opacity + ')';
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
   </script>
 </body>
 </html>
