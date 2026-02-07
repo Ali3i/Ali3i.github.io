@@ -59,24 +59,29 @@
     }
 
     .logo-svg{
-      width:90px; height:90px;
-      filter:drop-shadow(0 0 12px rgba(74,122,181,0.3));
+      width:96px; height:96px;
+      filter:drop-shadow(0 0 16px rgba(120,170,230,0.4));
       animation:logoGlow 3s ease-in-out infinite alternate;
+    }
+
+    .logo-bg{
+      fill:#0c1018;
     }
 
     .logo-circle{
       stroke-dasharray:490 44;
       stroke-dashoffset:534;
-      animation:drawCircle 2s ease-out 0.3s forwards;
+      animation:drawCircle 2s ease-out 0.3s forwards, spinCircle 12s linear 2.5s infinite;
+      transform-origin:100px 100px;
     }
 
     .logo-a, .logo-li{
       opacity:0;
-      animation:fadeInLogo 1s ease-out 1.5s forwards;
+      animation:fadeInLogo 1s ease-out 1.5s forwards, textShimmer 4s ease-in-out 2.5s infinite alternate;
     }
 
     .logo-li{
-      animation-delay:1.8s;
+      animation-delay:1.8s, 2.8s;
     }
 
     h1{
@@ -165,13 +170,23 @@
       to{stroke-dashoffset:0;}
     }
 
+    @keyframes spinCircle{
+      to{transform:rotate(360deg);}
+    }
+
     @keyframes fadeInLogo{
       to{opacity:1;}
     }
 
+    @keyframes textShimmer{
+      0%{fill:var(--brand); filter:brightness(1);}
+      50%{fill:#a0c4f0; filter:brightness(1.4);}
+      100%{fill:var(--brand); filter:brightness(1);}
+    }
+
     @keyframes logoGlow{
-      0%{filter:drop-shadow(0 0 8px rgba(74,122,181,0.2));}
-      100%{filter:drop-shadow(0 0 20px rgba(74,122,181,0.5));}
+      0%{filter:drop-shadow(0 0 10px rgba(120,170,230,0.3));}
+      100%{filter:drop-shadow(0 0 28px rgba(120,170,230,0.6));}
     }
 
     .message-form{
@@ -225,7 +240,7 @@
     @media(max-width:768px){
       .card{padding:32px 24px;}
       .logo-row{flex-direction:column; gap:12px;}
-      .logo-svg{width:72px; height:72px;}
+      .logo-svg{width:78px; height:78px;}
       h1{font-size:1.9rem;}
       .qr-code img{width:180px; height:180px;}
       .message-form{padding:24px 20px;}
@@ -242,21 +257,22 @@
             <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="cg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#4a7ab5"/>
-                  <stop offset="100%" stop-color="#8a8e9a"/>
+                  <stop offset="0%" stop-color="#78aae6"/>
+                  <stop offset="100%" stop-color="#b0b4be"/>
                 </linearGradient>
               </defs>
+              <circle class="logo-bg" cx="100" cy="100" r="82"/>
               <circle class="logo-circle" cx="100" cy="100" r="85" fill="none"
                       stroke="url(#cg)" stroke-width="7" stroke-linecap="round"
                       stroke-dasharray="490 44"/>
               <text class="logo-a" x="50" y="158"
                     font-family="'Playfair Display', Georgia, serif"
                     font-size="140" font-style="italic" font-weight="700"
-                    fill="#4a7ab5">A</text>
+                    fill="#78aae6">A</text>
               <text class="logo-li" x="118" y="152"
                     font-family="'Playfair Display', Georgia, serif"
                     font-size="50" font-weight="400" letter-spacing="1"
-                    fill="#4a7ab5">LI</text>
+                    fill="#78aae6">LI</text>
             </svg>
           </div>
           <div>
