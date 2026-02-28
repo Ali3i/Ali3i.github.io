@@ -216,38 +216,48 @@ function formatDateKey(d) {
 }
 
 function parseExcelWorkbook(workbook) {
-  const sheetName = workbook.SheetNames.find(n => n.toLowerCase().includes("data")) || workbook.SheetNames[0];
+  // Pick sheet: prefer one with "data" in name, else first sheet
+  const sheetName = workbook.SheetNames.find(n => /data|base|sheet/i.test(n)) || workbook.SheetNames[0];
   const ws = workbook.Sheets[sheetName];
-  if (!ws) return null;
+  if (!ws) return { _err: `No sheet found. Sheets: ${workbook.SheetNames.join(", ")}` };
 
   const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:"", raw:true });
 
-  // Find header row
+  // Find header row - look up to row 15, accept date+shift OR date alone
   let headerIdx = -1;
-  for (let i = 0; i < Math.min(rows.length, 10); i++) {
+  for (let i = 0; i < Math.min(rows.length, 15); i++) {
     const rowStr = rows[i].map(c => String(c).trim().toLowerCase());
-    if (rowStr.includes("date") && rowStr.some(c => c.includes("shift"))) {
-      headerIdx = i; break;
-    }
+    const hasDate  = rowStr.some(c => c === "date" || c === "تاريخ");
+    const hasShift = rowStr.some(c => c.includes("shift") || c.includes("وردية") || c.includes("shift"));
+    if (hasDate && hasShift) { headerIdx = i; break; }
+    if (hasDate && rowStr.some(c => c.includes("line") || c.includes("mc") || c.includes("sewer"))) { headerIdx = i; break; }
   }
-  if (headerIdx === -1) return null;
+  if (headerIdx === -1) {
+    const sample = rows.slice(0, 5).map(r => r.map(c => String(c).trim()).filter(Boolean).join(" | ")).join("\n");
+    return { _err: `Could not find header row (need Date + Shift columns).\nSheet used: "${sheetName}"\nFirst rows:\n${sample}` };
+  }
 
   const headers = rows[headerIdx].map(h => String(h).trim().toLowerCase());
+
+  // Flexible column matching
+  const find = (...terms) => headers.findIndex(h => terms.some(t => h.includes(t)));
   const idx = {
-    date:          headers.findIndex(h => h === "date"),
-    shift:         headers.findIndex(h => h === "shift"),
-    line:          headers.findIndex(h => h.includes("line")),
-    mc:            headers.findIndex(h => h.includes("mc number") || h === "mc"),
-    total:         headers.findIndex(h => h.includes("total qty")),
-    topSewer:      headers.findIndex(h => h.includes("top sewer")),
-    topRepaired:   headers.findIndex(h => h.includes("total top")),
-    bottomSewer:   headers.findIndex(h => h.includes("bottom sewer")),
-    bottomRepaired:headers.findIndex(h => h.includes("total bottom")),
+    date:          find("date", "تاريخ"),
+    shift:         find("shift", "وردية", "vshift"),
+    line:          find("line", "خط"),
+    mc:            find("mc number", "mc no", "machine no", "ماكينة", "mc"),
+    total:         find("total qty", "qty", "total", "كمية", "عدد"),
+    topSewer:      find("top sewer", "sewer top", "خياط علوي", "top"),
+    topRepaired:   find("total top", "top repaired", "top qty", "علوي"),
+    bottomSewer:   find("bottom sewer", "sewer bottom", "خياط سفلي", "bottom"),
+    bottomRepaired:find("total bottom", "bottom repaired", "bottom qty", "سفلي"),
   };
-  if (idx.mc === -1) idx.mc = headers.findIndex(h => h.includes("mc"));
+  // Fallback: if total not found use last col
   if (idx.total === -1) idx.total = headers.length - 1;
 
-  if (idx.date === -1 || idx.shift === -1) return null;
+  if (idx.date === -1 || idx.shift === -1) {
+    return { _err: `Missing required columns.\nSheet: "${sheetName}"\nHeaders found: ${headers.map((h,i)=>`[${i}]${h}`).join(", ")}\nNeed: Date, Shift` };
+  }
 
   const records = [];
   for (let i = headerIdx + 1; i < rows.length; i++) {
@@ -276,7 +286,9 @@ function parseExcelWorkbook(workbook) {
     records.push({ dateKey, dateObj:d, shift, line, mc, qty:rawQty,
                    topSewer, topRepaired, bottomSewer, bottomRepaired });
   }
-  if (records.length === 0) return null;
+  if (records.length === 0) {
+    return { _err: `Parsed 0 records from sheet "${sheetName}".\nHeaders mapped: date[${idx.date}] shift[${idx.shift}] total[${idx.total}].\nCheck that rows have a Date, Shift, and non-zero quantity.` };
+  }
 
   // Daily
   const dailyMap = {};
@@ -459,8 +471,8 @@ function Dashboard() {
       try {
         const wb = XLSX.read(new Uint8Array(e.target.result), { type:"array" });
         const parsed = parseExcelWorkbook(wb);
-        if (!parsed || parsed.dailyData.length === 0) {
-          setParseError('- Could not read data. Make sure the file has a "Data Base" sheet.');
+        if (!parsed || parsed._err) {
+          setParseError('Could not read data:\n' + (parsed?._err || 'Unknown error') + '\n\nSheets in file: ' + wb.SheetNames.join(", "));
           setLoading(false); return;
         }
         setUploadedData(parsed); setFileName(file.name);
@@ -1191,7 +1203,7 @@ function Dashboard() {
             <input ref={fileRef} type="file" accept=".xlsx,.xls" onChange={onFileChange} style={{ display:"none" }}/>
             {parseError && (
               <div style={{ marginTop:10, padding:"10px 14px", background:"rgba(239,68,68,.1)",
-                border:"1px solid rgba(239,68,68,.3)", borderRadius:8, fontSize:12, color:"#f87171" }}>{parseError}</div>
+                border:"1px solid rgba(239,68,68,.3)", borderRadius:8, fontSize:11, color:"#f87171", whiteSpace:"pre-wrap", fontFamily:"monospace" }}>{parseError}</div>
             )}
             {fileName && !parseError && (
               <div style={{ marginTop:10, padding:"10px 14px", background:"rgba(34,197,94,.08)",
@@ -1638,6 +1650,13 @@ function Dashboard() {
     </div>
   );
 }
+
+
+// --- Mount --------------------------------------------------------------------
+const _root = ReactDOM.createRoot(document.getElementById('root'));
+_root.render(<Dashboard/>);
+document.getElementById('loading-screen').style.display = 'none';
+
 
 
 // --- Mount --------------------------------------------------------------------
