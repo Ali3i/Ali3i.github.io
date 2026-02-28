@@ -401,12 +401,12 @@ function Dashboard() {
   const fileRef = useRef(null);
 
   // Active full data
-  const dailyData    = uploadedData?.dailyData    - DEFAULT_DAILY;
-  const machineData  = uploadedData?.machineData  - DEFAULT_MACHINE;
-  const lineData     = uploadedData?.lineData     - DEFAULT_LINE;
-  const sewerData    = uploadedData?.sewerData    - DEFAULT_SEWER;
-  const dailySewers  = uploadedData?.dailySewers  - DEFAULT_DAILY_SEWERS;
-  const period       = uploadedData?.period       - "February 2026";
+  const dailyData    = uploadedData?.dailyData    ?? DEFAULT_DAILY;
+  const machineData  = uploadedData?.machineData  ?? DEFAULT_MACHINE;
+  const lineData     = uploadedData?.lineData     ?? DEFAULT_LINE;
+  const sewerData    = uploadedData?.sewerData    ?? DEFAULT_SEWER;
+  const dailySewers  = uploadedData?.dailySewers  ?? DEFAULT_DAILY_SEWERS;
+  const period       = uploadedData?.period       ?? "February 2026";
   const isDefault   = !uploadedData;
 
   // -- Selected date index (null -> last date) --------------------------------
