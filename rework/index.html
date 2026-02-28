@@ -219,22 +219,22 @@ function parseExcelWorkbook(workbook) {
   // Pick sheet: prefer one with "data" in name, else first sheet
   const sheetName = workbook.SheetNames.find(n => /data|base|sheet/i.test(n)) || workbook.SheetNames[0];
   const ws = workbook.Sheets[sheetName];
-  if (!ws) return { _err: `No sheet found. Sheets: ${workbook.SheetNames.join(", ")}` };
+  if (!ws) return { _err: "No sheet found. Sheets: " + workbook.SheetNames.join(", ") };
 
   const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:"", raw:true });
 
-  // Find header row - look up to row 15, accept date+shift OR date alone
+  // Find header row - look up to row 15
   let headerIdx = -1;
   for (let i = 0; i < Math.min(rows.length, 15); i++) {
     const rowStr = rows[i].map(c => String(c).trim().toLowerCase());
-    const hasDate  = rowStr.some(c => c === "date" || c === "تاريخ");
-    const hasShift = rowStr.some(c => c.includes("shift") || c.includes("وردية") || c.includes("shift"));
+    const hasDate  = rowStr.some(c => c === "date");
+    const hasShift = rowStr.some(c => c.includes("shift"));
     if (hasDate && hasShift) { headerIdx = i; break; }
     if (hasDate && rowStr.some(c => c.includes("line") || c.includes("mc") || c.includes("sewer"))) { headerIdx = i; break; }
   }
   if (headerIdx === -1) {
-    const sample = rows.slice(0, 5).map(r => r.map(c => String(c).trim()).filter(Boolean).join(" | ")).join("\n");
-    return { _err: `Could not find header row (need Date + Shift columns).\nSheet used: "${sheetName}"\nFirst rows:\n${sample}` };
+    const sample = rows.slice(0, 5).map(r => r.map(c => String(c).trim()).filter(Boolean).join(" | ")).join(" / ");
+    return { _err: "Could not find header row (need Date + Shift columns). Sheet: \"" + sheetName + "\". First rows: " + sample };
   }
 
   const headers = rows[headerIdx].map(h => String(h).trim().toLowerCase());
@@ -242,21 +242,21 @@ function parseExcelWorkbook(workbook) {
   // Flexible column matching
   const find = (...terms) => headers.findIndex(h => terms.some(t => h.includes(t)));
   const idx = {
-    date:          find("date", "تاريخ"),
-    shift:         find("shift", "وردية", "vshift"),
-    line:          find("line", "خط"),
-    mc:            find("mc number", "mc no", "machine no", "ماكينة", "mc"),
-    total:         find("total qty", "qty", "total", "كمية", "عدد"),
-    topSewer:      find("top sewer", "sewer top", "خياط علوي", "top"),
-    topRepaired:   find("total top", "top repaired", "top qty", "علوي"),
-    bottomSewer:   find("bottom sewer", "sewer bottom", "خياط سفلي", "bottom"),
-    bottomRepaired:find("total bottom", "bottom repaired", "bottom qty", "سفلي"),
+    date:          find("date"),
+    shift:         find("shift"),
+    line:          find("line"),
+    mc:            find("mc number", "mc no", "machine no", "mc"),
+    total:         find("total qty", "qty", "total"),
+    topSewer:      find("top sewer", "sewer top"),
+    topRepaired:   find("total top", "top repaired", "top qty"),
+    bottomSewer:   find("bottom sewer", "sewer bottom"),
+    bottomRepaired:find("total bottom", "bottom repaired", "bottom qty"),
   };
   // Fallback: if total not found use last col
   if (idx.total === -1) idx.total = headers.length - 1;
 
   if (idx.date === -1 || idx.shift === -1) {
-    return { _err: `Missing required columns.\nSheet: "${sheetName}"\nHeaders found: ${headers.map((h,i)=>`[${i}]${h}`).join(", ")}\nNeed: Date, Shift` };
+    return { _err: "Missing required columns. Sheet: \"" + sheetName + "\". Headers found: " + headers.join(", ") + ". Need: Date, Shift" };
   }
 
   const records = [];
@@ -287,7 +287,7 @@ function parseExcelWorkbook(workbook) {
                    topSewer, topRepaired, bottomSewer, bottomRepaired });
   }
   if (records.length === 0) {
-    return { _err: `Parsed 0 records from sheet "${sheetName}".\nHeaders mapped: date[${idx.date}] shift[${idx.shift}] total[${idx.total}].\nCheck that rows have a Date, Shift, and non-zero quantity.` };
+    return { _err: "Parsed 0 records from sheet \"" + sheetName + "\". Headers mapped: date[" + idx.date + "] shift[" + idx.shift + "] total[" + idx.total + "]. Check rows have Date, Shift, and non-zero quantity." };
   }
 
   // Daily
