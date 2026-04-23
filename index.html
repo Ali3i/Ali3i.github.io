@@ -144,6 +144,33 @@
     }
     .contact-item-content a:hover{color:var(--brand);}
 
+    .app-link{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin:20px 0; padding:16px; border:1px solid rgba(74,122,181,0.22);
+      border-radius:12px; background:rgba(44,74,110,0.1);
+    }
+
+    .app-link .meta{
+      flex:1;
+    }
+
+    .app-link .meta .label{
+      color:var(--muted); font-size:.82rem; margin-bottom:4px;
+    }
+
+    .app-link .meta .value{
+      color:var(--text); font-weight:700; font-size:.98rem;
+      word-break:break-all;
+    }
+
+    .app-link .open-btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      min-height:44px; padding:10px 14px; border-radius:10px;
+      border:1px solid rgba(74,122,181,0.34); color:#fff; text-decoration:none;
+      background:linear-gradient(135deg, var(--navy), var(--brand));
+      font-weight:700; white-space:nowrap;
+    }
+
     .social-links{
       display:flex; gap:16px; justify-content:center; margin-top:32px;
       padding-top:32px; border-top:1px solid rgba(74,122,181,0.1);
@@ -297,6 +324,14 @@
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AFN:Ali%20Alessa%0ATEL;TYPE=CELL:+966507254625%0AEMAIL:contact@alialessa.info%0AURL:https://alialessa.info%0AEND:VCARD" alt="QR Code - Contact Information" loading="lazy" />
         </div>
         <p class="qr-label">Scan with your camera to add contact</p>
+      </div>
+
+      <div class="app-link" aria-label="FIPCO Production System Direct Link">
+        <div class="meta">
+          <div class="label">Direct link to the separate FIPCO Production Reporting app page</div>
+          <div class="value">https://alialessa.info/fipco-production.html</div>
+        </div>
+        <a class="open-btn" href="https://alialessa.info/fipco-production.html" target="_blank" rel="noopener">Open App</a>
       </div>
 
       <div class="contact-item">
