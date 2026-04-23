@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>FIPCO Production Reporting System</title>
+  <meta name="description" content="FIPCO daily production, shift control, productivity and final reporting system" />
+  <style>
+    :root {
+      --brand-900: #0f3f75;
+      --brand-700: #1f5ea2;
+      --brand-500: #2f78c2;
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-muted: #f7f9fc;
+      --text: #11263f;
+      --muted: #5b6b80;
+      --border: #d8e2ef;
+      --success: #0f8f54;
+      --warning: #ce7b07;
+      --danger: #bc2f2f;
+      --safe-b: calc(env(safe-area-inset-bottom, 0rem) + 0.75rem);
+      --safe-t: calc(env(safe-area-inset-top, 0rem) + 0.5rem);
+      --radius: 0.75rem;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; font-family: Inter, "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--text); }
+    body { font-variant-numeric: tabular-nums; }
+    .hidden { display: none !important; }
+    .app { max-width: 76rem; margin: 0 auto; min-height: 100vh; padding-bottom: 6rem; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: var(--safe-t) 1rem 0.75rem; display: flex; gap: 0.75rem; align-items: center;
+    }
+    .title { font-size: 1rem; font-weight: 700; margin: 0; }
+    .subtitle { margin: 0; font-size: 0.8rem; color: var(--muted); }
+    .container { padding: 1rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; margin-bottom: 0.75rem; }
+    .hero { padding: 1.2rem; background: linear-gradient(180deg, #f7fbff, #eef4fb); border: 1px solid #c8dbf4; border-radius: 1rem; }
+    .h1 { margin: 0.3rem 0 0.5rem; font-size: 1.5rem; }
+    .muted { color: var(--muted); }
+    .btn {
+      border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 0.75rem;
+      min-height: 2.85rem; padding: 0.7rem 0.9rem; width: 100%; font-weight: 600;
+    }
+    .btn:disabled { opacity: 0.5; }
+    .btn.primary { background: var(--brand-700); border-color: var(--brand-700); color: #fff; }
+    .btn.success { background: var(--success); border-color: var(--success); color: #fff; }
+    .btn.danger { background: #fff0f0; border-color: #f0cccc; color: var(--danger); }
+    .row { display: grid; gap: 0.6rem; }
+    .row.two { grid-template-columns: 1fr 1fr; }
+    .input, select, textarea {
+      width: 100%; min-height: 2.8rem; border: 1px solid var(--border); border-radius: 0.65rem;
+      padding: 0.65rem 0.7rem; background: #fff; color: var(--text);
+    }
+    textarea { min-height: 6rem; }
+    label { font-size: 0.82rem; color: #30435e; font-weight: 600; margin-bottom: 0.3rem; display:block; }
+    .grid-cards { display: grid; gap: 0.6rem; grid-template-columns: 1fr; }
+    .type-card { border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.8rem; background: #fff; }
+    .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .kpi { background: var(--surface-muted); border: 1px solid var(--border); border-radius: 0.65rem; padding: 0.6rem; }
+    .kpi .v { font-size: 1.2rem; font-weight: 700; }
+    .progress { height: 0.6rem; background: #e8eef7; border-radius: 99rem; overflow: hidden; }
+    .progress > span { display: block; height: 100%; width: 0%; background: var(--danger); }
+    .worker-row { border: 1px solid var(--border); border-radius: 0.7rem; padding: 0.65rem; background: #fff; margin-bottom: 0.5rem; }
+    .worker-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; }
+    .tag { font-size: 0.75rem; padding: 0.15rem 0.45rem; border-radius: 99rem; border: 1px solid var(--border); }
+    .tag.ok { border-color: #b7e3cb; color: var(--success); background: #f1fbf5; }
+    .tag.err { border-color: #f1c4c4; color: var(--danger); background: #fff4f4; }
+    .sticky-actions {
+      position: fixed; left: 0; right: 0; bottom: 3.5rem; background: rgba(255,255,255,0.98); border-top: 1px solid var(--border);
+      padding: 0.6rem 0.8rem; padding-bottom: calc(0.6rem + env(safe-area-inset-bottom, 0rem));
+    }
+    .sticky-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 0.5rem; max-width: 76rem; margin: 0 auto; }
+    .bottom-nav {
+      position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--border); z-index: 99;
+      padding-bottom: var(--safe-b);
+    }
+    .bottom-nav .nav { max-width: 76rem; margin: 0 auto; display: grid; grid-template-columns: repeat(5,1fr); gap: 0.2rem; padding: 0.4rem; }
+    .nav button { border: none; background: transparent; min-height: 2.8rem; font-size: 0.72rem; color: var(--muted); }
+    .nav button.active { color: var(--brand-700); font-weight: 700; }
+    .toast { position: fixed; right: 1rem; top: 4.8rem; background: #11263f; color:#fff; padding: 0.6rem 0.8rem; border-radius: 0.5rem; z-index:100; }
+    .table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .table th, .table td { border: 1px solid var(--border); padding: 0.45rem; text-align: left; }
+    .chartbars { display: grid; gap: 0.5rem; }
+    .barline { display: grid; grid-template-columns: 8rem 1fr auto; gap: 0.5rem; align-items: center; }
+    .barline .bar { height: 0.6rem; background: #e6edf7; border-radius: 99rem; overflow: hidden; }
+    .barline .bar span { display:block; height:100%; background: var(--brand-700); }
+    @media (min-width: 768px) {
+      .grid-cards { grid-template-columns: repeat(2,1fr); }
+      .kpis { grid-template-columns: repeat(3,1fr); }
+      .container { padding: 1rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="bottom-nav hidden" id="bottomNav">
+  <div class="nav">
+    <button data-route="dashboard">Home</button>
+    <button data-route="reports">Reports</button>
+    <button data-route="final">Final Report</button>
+    <button data-route="history">History</button>
+    <button data-route="profile">Profile</button>
+  </div>
+</div>
+<script>
+  const db = {
+    users: [
+      { username: 'supervisor', password: '1234', role: 'Production Supervisor', name: 'Nasser Al-Harbi' },
+      { username: 'foreman', password: '1234', role: 'Foreman', name: 'Majed Al-Otaibi' },
+      { username: 'manager', password: '1234', role: 'Production Manager', name: 'Rami Al-Ghamdi' },
+      { username: 'admin', password: '1234', role: 'Admin', name: 'System Admin' },
+    ],
+    workers: [], orders: [], shiftReports: [], finalReports: [], qualityReports: [], maintenanceReports: []
+  };
+  const roles = {
+    'Production Supervisor': ['internal','external','quality','maintenance','final'],
+    'Foreman': ['internal'],
+    'Production Manager': ['final','history','quality','maintenance'],
+    'Admin': ['internal','external','quality','maintenance','final','history','settings']
+  };
+
+  const state = {
+    route: 'landing', user: null, toast: '',
+    loginLoading: false,
+    internalForm: {
+      date: new Date().toISOString().slice(0,10), shift: 'Day Shift', orderNumber: '', order: null, line: 'Line A', remarks: '',
+      rows: Array.from({length:10}, (_,i)=>({rid:i+1, workerId:'', worker:null, output:'', incentive:0, err:''}))
+    }
+  };
+
+  function seedData() {
+    const positions = ['Operator','Tailor','Senior Tailor','Packing','Finishing','Quality','Helper','Sewing'];
+    const depts = ['Sewing','Packing','Finishing','Quality','Support'];
+    for (let i=1;i<=200;i++) {
+      db.workers.push({
+        id: 'W' + String(i).padStart(4,'0'),
+        name: `Worker ${i}`,
+        position: positions[i % positions.length],
+        department: depts[i % depts.length],
+        shiftEligibility: i % 2 ? 'Day Shift' : 'Night Shift',
+        status: 'Active',
+        standardIncentiveRule: i % 3 === 0 ? 'threshold' : 'per-piece',
+        lineAssignment: ['Line A','Line B','Line C'][i%3]
+      });
+    }
+    const customers = ['Saudi Retail Group','Najd Packaging','Riyadh Foods','Gulf Supplies','Jeddah Plastics'];
+    const products = ['Industrial Bags 20KG','PP Woven Sack','Food Grade Liner','Shipping Wrap','Bulk Packing Roll'];
+    for (let i=1;i<=30;i++) {
+      db.orders.push({
+        orderNumber:'ORD-' + (4200+i), customer: customers[i%customers.length], product: products[i%products.length],
+        targetQty: 6000 + (i*110), orderDate:'2026-04-'+String((i%24)+1).padStart(2,'0'), deliveryDate:'2026-05-'+String((i%24)+1).padStart(2,'0'),
+        line:['Line A','Line B','Line C'][i%3], section:['Sewing','Packing','Finishing'][i%3], status: i%2 ? 'In Production' : 'Planned'
+      });
+    }
+  }
+  seedData();
+
+  const app = document.getElementById('app');
+  const bottomNav = document.getElementById('bottomNav');
+
+  function toast(msg){
+    state.toast = msg; render(); setTimeout(()=>{ state.toast=''; render(); }, 2200);
+  }
+
+  function calcIncentive(worker, output) {
+    const val = Number(output || 0);
+    if (!worker) return 0;
+    if (worker.standardIncentiveRule === 'per-piece') return +(val * 0.18).toFixed(2);
+    return val > 90 ? +((val - 90) * 0.45).toFixed(2) : 0;
+  }
+
+  function internalSummary() {
+    const rows = state.internalForm.rows.filter(r => r.worker && Number(r.output) > 0);
+    const workers = rows.length;
+    const output = rows.reduce((a,b)=>a+Number(b.output||0),0);
+    const incentives = rows.reduce((a,b)=>a+Number(b.incentive||0),0);
+    const target = state.internalForm.order ? state.internalForm.order.targetQty : 0;
+    const ach = target ? (output/target)*100 : 0;
+    return {workers, output, incentives, avg: workers ? output/workers : 0, ach, remain: Math.max(0,target-output)};
+  }
+
+  function route(r){ state.route = r; render(); }
+  function logout(){ state.user=null; route('landing'); }
+
+  function lookupWorker(id) { return db.workers.find(w=>w.id.toLowerCase()===id.toLowerCase()); }
+  function lookupOrder(ord) { return db.orders.find(o=>o.orderNumber.toLowerCase()===ord.toLowerCase()); }
+
+  function saveShift() {
+    const f = state.internalForm;
+    const sum = internalSummary();
+    if (!f.order || sum.workers === 0) return toast('Complete required fields before saving shift report.');
+    db.shiftReports.push({
+      id: 'SR-' + Date.now(), date:f.date, shift:f.shift, order: f.order, line:f.line, remarks:f.remarks,
+      rows: f.rows.filter(r=>r.worker && Number(r.output)>0), summary:sum, by: state.user.name, time: new Date().toISOString()
+    });
+    toast('Shift report saved successfully.');
+    route('shiftReview');
+  }
+
+  function generateFinal() {
+    const f = state.internalForm;
+    const sameDay = db.shiftReports.filter(s=>s.date===f.date && s.order.orderNumber===f.order?.orderNumber);
+    if (!sameDay.length) return toast('No shift reports available for final generation.');
+    const day = sameDay.find(s=>s.shift==='Day Shift');
+    const night = sameDay.find(s=>s.shift==='Night Shift');
+    const workers = sameDay.flatMap(s=>s.rows);
+    const totalOutput = workers.reduce((a,b)=>a+Number(b.output||0),0);
+    const totalInc = workers.reduce((a,b)=>a+Number(b.incentive||0),0);
+    const target = f.order.targetQty || 1;
+    const final = {
+      id:'FR-'+Date.now(), date:f.date, order:f.order, preparedBy:state.user.name, status:'Draft',
+      shifts:[day,night].filter(Boolean), workers,
+      kpi:{ totalOutput,totalInc, totalWorkers:workers.length, avg: workers.length ? totalOutput/workers.length:0, eff:(totalOutput/target)*100 }
+    };
+    db.finalReports = [final, ...db.finalReports];
+    route('final');
+    toast('Final daily report generated.');
+  }
+
+  function renderLanding() {
+    return `<div class="container">
+      <section class="hero">
+        <div class="tag">FIPCO</div>
+        <h1 class="h1">FIPCO Production Reporting System</h1>
+        <p class="muted">Daily Production, Shift Control, Employee Productivity, and Final Reporting.</p>
+        <p class="muted">Mobile-first enterprise workflow for supervisors, foremen, managers, and administrators.</p>
+        <button class="btn primary" onclick="route('login')">Enter System</button>
+      </section>
+    </div>`;
+  }
+
+  function renderLogin() {
+    return `<div class="container"><div class="card">
+      <h2 class="h1" style="font-size:1.2rem">Secure Login</h2>
+      <p class="muted">Use demo credentials to access role-based experience.</p>
+      <div class="row">
+        <div><label>Username</label><input class="input" id="u" placeholder="Enter username" /></div>
+        <div><label>Password</label><input class="input" id="p" type="password" placeholder="Enter password" /></div>
+        <label><input id="remember" type="checkbox" /> Remember me</label>
+        <button class="btn primary" onclick="doLogin()">${state.loginLoading ? 'Signing in...' : 'Login'}</button>
+        <a class="muted" href="#">Forgot password?</a>
+      </div>
+      <div class="card" style="margin-top:0.8rem"><strong>Demo users:</strong> supervisor / foreman / manager / admin (password: 1234)</div>
+    </div></div>`;
+  }
+
+  function renderReportsHome() {
+    const allowed = roles[state.user.role] || [];
+    const cards = [
+      ['internal','Internal Production','Bulk worker productivity and shift report'],
+      ['external','External Production','Subcontractor outbound/inbound tracking'],
+      ['quality','Quality Reports','Defects, acceptance and rework'],
+      ['maintenance','Maintenance Reports','Breakdown and downtime logs']
+    ].filter(c=>allowed.includes(c[0]));
+    return `<div class="container"><div class="card"><h2 class="h1" style="font-size:1.2rem">Select Report Type</h2>
+      <div class="grid-cards">${cards.map(c=>`<button class="type-card" onclick="route('${c[0]}')"><strong>${c[1]}</strong><div class="muted">${c[2]}</div></button>`).join('')}</div></div></div>`;
+  }
+
+  function renderInternal() {
+    const f = state.internalForm;
+    const sum = internalSummary();
+    const p = Math.min(100, sum.ach);
+    const pColor = p >= 100 ? 'var(--success)' : p >= 70 ? 'var(--warning)' : 'var(--danger)';
+    return `<div class="container">
+      <div class="card"><h3>Section 1: Basic Order Info</h3>
+        <div class="row two">
+          <div><label>Report Date</label><input class="input" type="date" value="${f.date}" onchange="state.internalForm.date=this.value" /></div>
+          <div><label>Shift</label><select onchange="state.internalForm.shift=this.value"><option ${f.shift==='Day Shift'?'selected':''}>Day Shift</option><option ${f.shift==='Night Shift'?'selected':''}>Night Shift</option></select></div>
+          <div><label>Order Number</label><input class="input" value="${f.orderNumber}" oninput="onOrderInput(this.value)" placeholder="ORD-4205" /></div>
+          <div><label>Line / Section</label><select onchange="state.internalForm.line=this.value"><option>Line A</option><option>Line B</option><option>Line C</option></select></div>
+        </div>
+        ${f.order ? `<div class="card"><div><strong>Target:</strong> ${f.order.targetQty} PCS</div><div><strong>Customer:</strong> ${f.order.customer}</div><div><strong>Product:</strong> ${f.order.product}</div><div><strong>Delivery:</strong> ${f.order.deliveryDate}</div></div>` : '<div class="muted">Search order to auto-populate target and product details.</div>'}
+      </div>
+
+      <div class="card"><h3>Section 2: Bulk Worker Productivity Entry</h3>
+      ${f.rows.map((r,idx)=>`<div class="worker-row">
+          <div class="worker-head"><strong>#${idx+1}</strong><span class="tag ${r.err ? 'err' : (r.worker ? 'ok' : '')}">${r.err ? r.err : (r.worker ? 'Valid' : 'Pending')}</span></div>
+          <div class="row two">
+            <div><label>Worker ID</label><input class="input" value="${r.workerId}" oninput="onWorkerId(${idx},this.value)" placeholder="W0001" /></div>
+            <div><label>Output (PCS)</label><input class="input" type="number" value="${r.output}" oninput="onOutput(${idx},this.value)" /></div>
+          </div>
+          <div class="muted">${r.worker ? `${r.worker.name} · ${r.worker.position} / ${r.worker.department}` : 'Worker name and department will auto-fill.'}</div>
+          <div><strong>Incentive:</strong> ${Number(r.incentive||0).toFixed(2)} SAR</div>
+          <button class="btn danger" onclick="deleteRow(${idx})">Delete Row</button>
+        </div>`).join('')}
+      <button class="btn" onclick="addRows()">Add 10 More Rows</button></div>
+
+      <div class="card"><h3>Section 3: Live Summary</h3>
+        <div class="kpis">
+          <div class="kpi"><div class="muted">Shift Worker Count</div><div class="v">${sum.workers}</div></div>
+          <div class="kpi"><div class="muted">Total Output</div><div class="v">${sum.output}</div></div>
+          <div class="kpi"><div class="muted">Total Incentives</div><div class="v">${sum.incentives.toFixed(2)} SAR</div></div>
+          <div class="kpi"><div class="muted">Avg/Worker</div><div class="v">${sum.avg.toFixed(1)}</div></div>
+          <div class="kpi"><div class="muted">Achievement</div><div class="v">${sum.ach.toFixed(1)}%</div></div>
+          <div class="kpi"><div class="muted">Remaining Target</div><div class="v">${sum.remain}</div></div>
+        </div>
+        <div class="progress" style="margin-top:0.6rem"><span style="width:${p}%;background:${pColor}"></span></div>
+      </div>
+
+      <div class="card"><h3>Section 4: Notes / Remarks</h3><textarea onchange="state.internalForm.remarks=this.value" placeholder="Machine delay, manpower shortage, quality issue...">${f.remarks || ''}</textarea></div>
+
+      <div class="sticky-actions"><div class="sticky-grid">
+        <button class="btn success" ${(!f.order || sum.workers===0)?'disabled':''} onclick="saveShift()">Save Shift Report</button>
+        <button class="btn" onclick="clearInternal()">Clear All</button>
+        <button class="btn" onclick="window.print()">Print Preview</button>
+        <button class="btn danger" onclick="route('reports')">Cancel</button>
+      </div></div>
+    </div>`;
+  }
+
+  function renderSimpleForm(type) {
+    const map = {
+      external: ['Vendor / Subcontractor','Order Number','Sent Qty','Received Qty','Pending Qty','Rejected Qty','Notes'],
+      quality: ['Date','Shift','Order Number','Inspector','Defect Category','Defect Qty','Accepted Qty','Rework Qty','Rejected Qty','Notes'],
+      maintenance: ['Date','Shift','Machine Number','Line / Section','Issue Type','Breakdown Start','Breakdown End','Downtime','Technician','Action Taken','Root Cause','Notes']
+    };
+    return `<div class="container"><div class="card"><h2 class="h1" style="font-size:1.2rem">${type[0].toUpperCase()+type.slice(1)} Report</h2>
+      <div class="row">${map[type].map(f=>`<div><label>${f}</label><input class="input" /></div>`).join('')}
+        <button class="btn success" onclick="toast('${type} report saved (mock).')">Save ${type} Report</button>
+      </div>
+    </div></div>`;
+  }
+
+  function renderShiftReview() {
+    const last = db.shiftReports[db.shiftReports.length-1];
+    if (!last) return `<div class="container"><div class="card">No shift reports yet.</div></div>`;
+    return `<div class="container"><div class="card"><h2 class="h1" style="font-size:1.2rem">Shift Review</h2>
+      <p><strong>${last.shift}</strong> · ${last.date} · ${last.order.orderNumber}</p>
+      <div class="kpis">
+        <div class="kpi"><div class="muted">Workers</div><div class="v">${last.summary.workers}</div></div>
+        <div class="kpi"><div class="muted">Output</div><div class="v">${last.summary.output}</div></div>
+        <div class="kpi"><div class="muted">Incentives</div><div class="v">${last.summary.incentives.toFixed(2)}</div></div>
+      </div>
+      <p class="muted">Saved by ${last.by} at ${new Date(last.time).toLocaleString()}.</p>
+      <button class="btn" onclick="route('internal')">Edit report</button>
+      <button class="btn success" onclick="generateFinal()">Submit for final day consolidation</button>
+    </div></div>`;
+  }
+
+  function renderFinal() {
+    const fr = db.finalReports[0];
+    if (!fr) return `<div class="container"><div class="card">No final report generated yet.</div></div>`;
+    const day = fr.shifts.find(s=>s.shift==='Day Shift');
+    const night = fr.shifts.find(s=>s.shift==='Night Shift');
+    const top = [...fr.workers].sort((a,b)=>Number(b.output)-Number(a.output)).slice(0,10);
+    return `<div class="container">
+      <div class="card"><h2 class="h1" style="font-size:1.1rem">DAILY PRODUCTION REPORT (FINAL)</h2>
+        <p><strong>Report No:</strong> ${fr.id} · <strong>Date:</strong> ${fr.date} · <strong>Status:</strong> ${fr.status}</p>
+        <p><strong>Prepared By:</strong> ${fr.preparedBy}</p>
+      </div>
+      <div class="card"><h3>Order Information</h3>
+        <p>${fr.order.orderNumber} | ${fr.order.customer} | ${fr.order.product} | Target ${fr.order.targetQty} PCS</p>
+      </div>
+      <div class="card"><h3>Shift Summary</h3>
+      <table class="table"><thead><tr><th>Shift</th><th>Workers</th><th>Target</th><th>Actual</th><th>Incentives</th><th>Efficiency</th></tr></thead>
+      <tbody>
+      ${[day,night].filter(Boolean).map(s=>`<tr><td>${s.shift}</td><td>${s.summary.workers}</td><td>${fr.order.targetQty}</td><td>${s.summary.output}</td><td>${s.summary.incentives.toFixed(2)}</td><td>${s.summary.ach.toFixed(1)}%</td></tr>`).join('')}
+      <tr><th>Total</th><th>${fr.kpi.totalWorkers}</th><th>${fr.order.targetQty}</th><th>${fr.kpi.totalOutput}</th><th>${fr.kpi.totalInc.toFixed(2)}</th><th>${fr.kpi.eff.toFixed(1)}%</th></tr>
+      </tbody></table></div>
+      <div class="card"><h3>KPI Cards</h3><div class="kpis">
+        <div class="kpi"><div class="muted">Total Production</div><div class="v">${fr.kpi.totalOutput}</div></div>
+        <div class="kpi"><div class="muted">Total Incentives</div><div class="v">${fr.kpi.totalInc.toFixed(2)} SAR</div></div>
+        <div class="kpi"><div class="muted">Total Workers</div><div class="v">${fr.kpi.totalWorkers}</div></div>
+        <div class="kpi"><div class="muted">Avg Output</div><div class="v">${fr.kpi.avg.toFixed(1)}</div></div>
+        <div class="kpi"><div class="muted">Overall Efficiency</div><div class="v">${fr.kpi.eff.toFixed(1)}%</div></div>
+        <div class="kpi"><div class="muted">Top Performer</div><div class="v">${top[0]?.worker?.name || '-'}</div></div>
+      </div></div>
+      <div class="card"><h3>Charts</h3><div class="chartbars">
+        <div class="barline"><span>Day Contribution</span><div class="bar"><span style="width:${day ? (day.summary.output/fr.kpi.totalOutput*100).toFixed(1):0}%"></span></div><strong>${day ? day.summary.output : 0}</strong></div>
+        <div class="barline"><span>Night Contribution</span><div class="bar"><span style="width:${night ? (night.summary.output/fr.kpi.totalOutput*100).toFixed(1):0}%"></span></div><strong>${night ? night.summary.output : 0}</strong></div>
+        ${top.map(t=>`<div class="barline"><span>${t.worker.name}</span><div class="bar"><span style="width:${Math.min(100,(t.output/(top[0]?.output||1))*100)}%"></span></div><strong>${t.output}</strong></div>`).join('')}
+      </div></div>
+      <div class="card"><h3>Export Actions</h3>
+        <button class="btn" onclick="exportCSV()">Export Excel (CSV)</button>
+        <button class="btn" onclick="window.print()">Export PDF / Print</button>
+        <button class="btn success" onclick="approveFinal()">Approve Final Report</button>
+      </div>
+    </div>`;
+  }
+
+  function renderDashboard() {
+    const rCount = db.shiftReports.length;
+    const fCount = db.finalReports.length;
+    const quality = db.qualityReports.length;
+    const maintenance = db.maintenanceReports.length;
+    return `<div class="container"><div class="card"><h2 class="h1" style="font-size:1.2rem">Operations Dashboard</h2>
+      <p class="muted">Welcome, ${state.user.name} (${state.user.role})</p>
+      <div class="kpis">
+        <div class="kpi"><div class="muted">Shift Reports</div><div class="v">${rCount}</div></div>
+        <div class="kpi"><div class="muted">Final Reports</div><div class="v">${fCount}</div></div>
+        <div class="kpi"><div class="muted">Quality Logs</div><div class="v">${quality}</div></div>
+        <div class="kpi"><div class="muted">Maintenance Logs</div><div class="v">${maintenance}</div></div>
+      </div></div></div>`;
+  }
+
+  function renderHistory() {
+    return `<div class="container"><div class="card"><h2 class="h1" style="font-size:1.2rem">History</h2>
+      ${db.shiftReports.map(s=>`<div class="card"><strong>${s.date}</strong> ${s.shift} · ${s.order.orderNumber} · ${s.summary.output} PCS</div>`).join('') || '<p class="muted">No historical reports yet.</p>'}
+    </div></div>`;
+  }
+
+  function renderProfile() {
+    return `<div class="container"><div class="card"><h2 class="h1" style="font-size:1.2rem">Profile</h2>
+      <p><strong>${state.user.name}</strong></p><p>${state.user.role}</p>
+      <button class="btn danger" onclick="logout()">Logout</button>
+    </div></div>`;
+  }
+
+  function renderTopbar() {
+    if (!state.user) return '';
+    return `<header class="topbar"><div><p class="title">FIPCO Production</p><p class="subtitle">${state.user.role}</p></div></header>`;
+  }
+
+  function render() {
+    bottomNav.classList.toggle('hidden', !state.user);
+    [...bottomNav.querySelectorAll('button')].forEach(b=>{
+      b.classList.toggle('active', b.dataset.route===state.route);
+      b.onclick = ()=>route(b.dataset.route);
+    });
+
+    let content = '';
+    if (state.route==='landing') content = renderLanding();
+    if (state.route==='login') content = renderLogin();
+    if (state.route==='dashboard') content = renderDashboard();
+    if (state.route==='reports') content = renderReportsHome();
+    if (state.route==='internal') content = renderInternal();
+    if (state.route==='external' || state.route==='quality' || state.route==='maintenance') content = renderSimpleForm(state.route);
+    if (state.route==='shiftReview') content = renderShiftReview();
+    if (state.route==='final') content = renderFinal();
+    if (state.route==='history') content = renderHistory();
+    if (state.route==='profile') content = renderProfile();
+
+    app.innerHTML = `${renderTopbar()}${content}${state.toast ? `<div class="toast">${state.toast}</div>` : ''}`;
+  }
+
+  function doLogin() {
+    const u = document.getElementById('u')?.value?.trim();
+    const p = document.getElementById('p')?.value?.trim();
+    if (!u || !p) return toast('Username and password are required.');
+    state.loginLoading = true; render();
+    setTimeout(()=>{
+      const found = db.users.find(x=>x.username===u && x.password===p);
+      state.loginLoading = false;
+      if (!found) return toast('Invalid credentials.');
+      state.user = found; state.route = 'dashboard';
+      if (document.getElementById('remember')?.checked) localStorage.setItem('fipco_session', JSON.stringify(found));
+      render();
+      toast('Login successful.');
+    }, 850);
+  }
+
+  function onOrderInput(val) {
+    state.internalForm.orderNumber = val;
+    clearTimeout(window._orderDeb);
+    window._orderDeb = setTimeout(()=>{
+      const o = lookupOrder(val);
+      state.internalForm.order = o || null;
+      if (!o && val.length > 3) toast('Order not found.');
+      render();
+    }, 320);
+  }
+
+  function onWorkerId(idx, val) {
+    const row = state.internalForm.rows[idx];
+    row.workerId = val; row.err=''; row.worker=null;
+    clearTimeout(row._deb);
+    row._deb = setTimeout(()=>{
+      const w = lookupWorker(val);
+      const dup = state.internalForm.rows.some((r,i)=>i!==idx && r.workerId && r.workerId.toLowerCase()===val.toLowerCase());
+      if (dup) row.err = 'Duplicate';
+      else if (!w && val.trim()) row.err='Not found';
+      else row.worker = w;
+      row.incentive = calcIncentive(row.worker, row.output);
+      render();
+    }, 260);
+  }
+
+  function onOutput(idx, val){
+    const row = state.internalForm.rows[idx]; row.output = val;
+    row.incentive = calcIncentive(row.worker, val); render();
+  }
+
+  function addRows(){
+    const s = state.internalForm.rows.length;
+    for (let i=1;i<=10;i++) state.internalForm.rows.push({rid:s+i, workerId:'', worker:null, output:'', incentive:0, err:''});
+    render();
+  }
+
+  function deleteRow(i){ state.internalForm.rows.splice(i,1); render(); }
+
+  function clearInternal(){
+    state.internalForm.orderNumber=''; state.internalForm.order=null; state.internalForm.remarks='';
+    state.internalForm.rows = Array.from({length:10}, (_,i)=>({rid:i+1, workerId:'', worker:null, output:'', incentive:0, err:''}));
+    render();
+  }
+
+  function approveFinal(){
+    if (!db.finalReports[0]) return;
+    db.finalReports[0].status = 'Approved';
+    toast('Final report approved.'); render();
+  }
+
+  function exportCSV(){
+    const fr = db.finalReports[0]; if (!fr) return;
+    const rows = [['Worker ID','Worker Name','Position','Output','Incentive']]
+      .concat(fr.workers.map(w=>[w.worker.id,w.worker.name,w.worker.position,w.output,w.incentive]));
+    const csv = rows.map(r=>r.join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${fr.id}.csv`; a.click();
+    toast('CSV export completed.');
+  }
+
+  const remembered = localStorage.getItem('fipco_session');
+  if (remembered) {
+    try { state.user = JSON.parse(remembered); state.route = 'dashboard'; } catch {}
+  }
+  render();
+</script>
+</body>
+</html>
