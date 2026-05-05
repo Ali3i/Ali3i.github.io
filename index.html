@@ -1,453 +1,173 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALI ALESSA - Contact Information</title>
-  <meta name="description" content="Contact information and professional networking" />
-  <link rel="canonical" href="https://alialessa.info/" />
-  <meta property="og:title" content="ALI ALESSA - Contact Information" />
-  <meta property="og:description" content="Professional contact information" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://alialessa.info/" />
-  <meta name="theme-color" content="#0a0e14" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; form-action 'self' https://formsubmit.co; img-src 'self' data: https: http:; script-src 'self' 'unsafe-inline'; connect-src 'self';">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://formsubmit.co">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,700&display=swap" rel="stylesheet">
+  <title>HR Leave Management Dashboard</title>
+  <meta name="description" content="Modern HR dashboard for leave tracking and analytics in a manufacturing company" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root{
-      --bg:#0a0e14; --surface:#0e1319; --stroke:#1a2535; --text:#e4eaf0; --muted:#8a95a3;
-      --brand:#4a7ab5; --brand-2:#8a8e9a; --accent:#6b9fd4; --success:#10b981; --radius:16px;
-      --navy:#2c4a6e; --silver:#8a8a8e;
+      --bg:#f4f7fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--line:#d8e0ea;
+      --blue:#5ea7f2;--blue-dark:#3f84ca;--accent:#8ec5ff;--gray:#b9c5d6;
+      --success:#16a34a;--warning:#f59e0b;--danger:#ef4444;
+      --radius:14px;
     }
-    *{box-sizing:border-box; margin:0; padding:0;}
-    #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-    html{scroll-behavior:smooth;}
-    body{
-      font-family:"IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text); background:var(--bg); line-height:1.6;
-      background:radial-gradient(1200px 600px at 80% -10%, rgba(74,122,181,0.12), transparent 60%),
-                 radial-gradient(1000px 600px at 10% -20%, rgba(107,159,212,0.08), transparent 60%),
-                 var(--bg);
-      background-attachment:fixed;
-      display:flex; align-items:center; justify-content:center; min-height:100vh;
-      padding:24px;
-    }
-
-    .container{max-width:700px; width:100%; position:relative; z-index:1;}
-
-    .card{
-      background:rgba(14, 19, 25, 0.65);
-      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-      border:1px solid rgba(74,122,181,0.12); border-radius:var(--radius);
-      padding:48px; box-shadow:0 16px 60px rgba(0,0,0,0.4);
-    }
-
-    .header{
-      text-align:center; margin-bottom:40px;
-    }
-
-    .logo-row{
-      display:flex; align-items:center; justify-content:center; gap:24px;
-      margin-bottom:8px;
-    }
-
-    .logo{
-      flex-shrink:0;
-    }
-
-    .logo-svg{
-      width:96px; height:96px;
-      filter:drop-shadow(0 0 16px rgba(120,170,230,0.4));
-      animation:logoGlow 3s ease-in-out infinite alternate;
-    }
-
-    .logo-bg{
-      fill:#0c1018;
-    }
-
-    .logo-circle{
-      stroke-dasharray:490 44;
-      stroke-dashoffset:534;
-      animation:drawCircle 2s ease-out 0.3s forwards, spinCircle 12s linear 2.5s infinite;
-      transform-origin:center; transform-box:fill-box;
-    }
-
-    .logo-a, .logo-li{
-      opacity:0;
-      animation:fadeInLogo 1s ease-out 1.5s forwards, textShimmer 4s ease-in-out 2.5s infinite alternate;
-    }
-
-    .logo-li{
-      animation-delay:1.8s, 2.8s;
-    }
-
-    h1{
-      font-family:"Playfair Display", Georgia, serif;
-      font-size:2.4rem; font-weight:700; margin-bottom:4px;
-      background:linear-gradient(135deg, #e4eaf0 30%, var(--brand));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      background-clip:text; display:inline-block; letter-spacing:1px;
-    }
-
-    .subtitle{
-      color:var(--muted); font-size:0.95rem; margin-top:4px;
-      letter-spacing:2px; text-transform:uppercase; font-weight:600;
-    }
-
-    .qr-section{
-      text-align:center; margin:32px 0;
-      padding:24px; background:rgba(44,74,110,0.06);
-      border-radius:12px; border:1px solid rgba(74,122,181,0.1);
-    }
-
-    .qr-section h2{
-      font-size:1.1rem; color:var(--text); margin-bottom:16px;
-      font-weight:600;
-    }
-
-    .qr-code{
-      display:inline-block; padding:16px; background:#fff;
-      border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.2);
-    }
-
-    .qr-code img{
-      display:block; width:200px; height:200px;
-    }
-
-    .qr-label{
-      margin-top:12px; color:var(--muted); font-size:0.9rem;
-    }
-
-    .contact-item{
-      display:flex; align-items:center; gap:16px; margin-bottom:20px;
-      padding:16px; background:rgba(44,74,110,0.08);
-      border-radius:12px; transition:all .2s;
-    }
-    .contact-item:hover{background:rgba(44,74,110,0.15);}
-
-    .contact-item-icon{
-      width:44px; height:44px; min-width:44px; border-radius:10px;
-      background:linear-gradient(135deg, var(--navy), var(--brand));
-      display:flex; align-items:center; justify-content:center;
-      color:#fff;
-    }
-
-    .contact-item-content{flex:1;}
-    .contact-item-content .label{
-      color:var(--muted); font-size:0.85rem; margin-bottom:4px;
-    }
-    .contact-item-content a{
-      color:var(--text); text-decoration:none; font-weight:600;
-    }
-    .contact-item-content a:hover{color:var(--brand);}
-
-    .social-links{
-      display:flex; gap:16px; justify-content:center; margin-top:32px;
-      padding-top:32px; border-top:1px solid rgba(74,122,181,0.1);
-    }
-
-    .social-link{
-      width:56px; height:56px; display:flex; align-items:center; justify-content:center;
-      border:1px solid rgba(74,122,181,0.12); border-radius:12px;
-      background:rgba(14,19,25,0.5); text-decoration:none; color:var(--text);
-      transition:all .2s;
-    }
-    .social-link:hover{
-      transform:translateY(-4px); border-color:var(--brand);
-      background:rgba(44,74,110,0.15); box-shadow:0 6px 20px rgba(0,0,0,.3);
-    }
-    .social-link svg{width:28px; height:28px;}
-
-    footer{
-      margin-top:32px; padding-top:24px; border-top:1px solid rgba(74,122,181,0.1);
-      text-align:center; color:var(--muted); font-size:0.9rem;
-    }
-
-    @keyframes drawCircle{
-      to{stroke-dashoffset:0;}
-    }
-
-    @keyframes spinCircle{
-      to{transform:rotate(360deg);}
-    }
-
-    @keyframes fadeInLogo{
-      to{opacity:1;}
-    }
-
-    @keyframes textShimmer{
-      0%{fill:#78aae6; filter:brightness(1);}
-      50%{fill:#b8d4f5; filter:brightness(1.3);}
-      100%{fill:#78aae6; filter:brightness(1);}
-    }
-
-    @keyframes logoGlow{
-      0%{filter:drop-shadow(0 0 10px rgba(120,170,230,0.3));}
-      100%{filter:drop-shadow(0 0 28px rgba(120,170,230,0.6));}
-    }
-
-    .message-form{
-      margin:32px 0; padding:32px; background:rgba(44,74,110,0.06);
-      border-radius:12px; border:1px solid rgba(74,122,181,0.1);
-    }
-
-    .message-form h2{
-      font-size:1.3rem; color:var(--text); margin-bottom:24px;
-      font-weight:600; text-align:center;
-    }
-
-    .form-group{margin-bottom:20px;}
-
-    .form-group label{
-      display:block; color:var(--muted); font-size:0.9rem;
-      margin-bottom:8px; font-weight:600;
-    }
-
-    .form-group input,
-    .form-group textarea{
-      width:100%; padding:14px 16px; border-radius:10px;
-      border:1px solid var(--stroke); background:rgba(14,19,25,0.6);
-      color:var(--text); font-family:inherit; font-size:1rem;
-      transition:all .2s;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus{
-      outline:none; border-color:var(--brand);
-      box-shadow:0 0 0 3px rgba(74,122,181,0.15);
-    }
-
-    .form-group textarea{
-      resize:vertical; min-height:120px; line-height:1.6;
-    }
-
-    .submit-btn{
-      width:100%; padding:16px; border:none; border-radius:10px;
-      background:linear-gradient(135deg, var(--navy), var(--brand));
-      color:#fff; font-weight:700; font-size:1rem;
-      cursor:pointer; transition:all .2s; font-family:inherit;
-    }
-
-    .submit-btn:hover{
-      transform:translateY(-2px); box-shadow:0 8px 24px rgba(44,74,110,0.4);
-    }
-
-    .submit-btn:active{transform:translateY(0);}
-
-    @media(max-width:768px){
-      .card{padding:32px 24px;}
-      .logo-row{flex-direction:column; gap:12px;}
-      .logo-svg{width:78px; height:78px;}
-      h1{font-size:1.9rem;}
-      .qr-code img{width:180px; height:180px;}
-      .message-form{padding:24px 20px;}
-    }
-
-    @media(prefers-reduced-motion:reduce){
-      *, *::before, *::after{
-        animation-duration:0.01ms !important;
-        animation-iteration-count:1 !important;
-        transition-duration:0.01ms !important;
-      }
-      #bg-canvas{display:none;}
-    }
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .dashboard{max-width:1380px;margin:0 auto;padding:24px;display:grid;gap:18px}
+    .topbar,.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
+    .topbar{padding:20px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+    h1{margin:0;font-size:1.6rem}.sub{margin-top:6px;color:var(--muted);font-size:.95rem}
+    .filters{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:10px;min-width:60%}
+    select,input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--text)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .kpi{padding:16px 18px}.kpi h3{margin:0;color:var(--muted);font-size:.9rem;font-weight:600}
+    .kpi .v{font-size:1.85rem;font-weight:700;margin-top:8px}.kpi .i{font-size:.82rem;color:var(--muted)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .panel{padding:16px}.panel h2{margin:0 0 8px;font-size:1.05rem}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;font-size:.92rem}
+    th,td{padding:10px;border-bottom:1px solid #e7edf5;text-align:left;white-space:nowrap}
+    th{background:#f7fbff;color:#374151}
+    .pill{padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:600}
+    .ok{background:#dcfce7;color:#166534}.no{background:#fee2e2;color:#991b1b}
+    .low{color:var(--danger);font-weight:700}.highlight{background:#fef9c3}
+    .insights ul{margin:10px 0 0 20px;color:#334155}
+    .legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:.85rem}
+    .icon{font-size:1.1rem;margin-right:6px}
+    @media (max-width:1080px){.kpis{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,1fr);min-width:100%}}
+    @media (max-width:640px){.kpis{grid-template-columns:1fr}.filters{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <canvas id="bg-canvas"></canvas>
-  <div class="container">
-    <div class="card">
-      <div class="header">
-        <div class="logo-row">
-          <div class="logo">
-            <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="cg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#78aae6"/>
-                  <stop offset="100%" stop-color="#b0b4be"/>
-                </linearGradient>
-              </defs>
-              <circle class="logo-bg" cx="100" cy="100" r="82"/>
-              <circle class="logo-circle" cx="100" cy="100" r="85" fill="none"
-                      stroke="url(#cg)" stroke-width="7" stroke-linecap="round"
-                      stroke-dasharray="490 44"/>
-              <text class="logo-a" x="50" y="158"
-                    font-family="'Playfair Display', Georgia, serif"
-                    font-size="140" font-style="italic" font-weight="700"
-                    fill="#78aae6">A</text>
-              <text class="logo-li" x="118" y="152"
-                    font-family="'Playfair Display', Georgia, serif"
-                    font-size="50" font-weight="400" letter-spacing="1"
-                    fill="#78aae6">LI</text>
-            </svg>
-          </div>
-          <div>
-            <h1>ALI ALESSA</h1>
-            <p class="subtitle">Contact Information</p>
-          </div>
-        </div>
+  <main class="dashboard">
+    <section class="topbar">
+      <div>
+        <h1>HR Leave Management Dashboard</h1>
+        <div class="sub">Manufacturing Company • Saudi Labor Law Based • Updated: <span id="asOf"></span></div>
       </div>
-
-      <div class="qr-section">
-        <h2>Scan to Save Contact</h2>
-        <div class="qr-code">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AFN:Ali%20Alessa%0ATEL;TYPE=CELL:+966507254625%0AEMAIL:contact@alialessa.info%0AURL:https://alialessa.info%0AEND:VCARD" alt="QR Code - Contact Information" loading="lazy" />
-        </div>
-        <p class="qr-label">Scan with your camera to add contact</p>
+      <div class="filters">
+        <select id="departmentFilter"><option value="all">All Departments</option></select>
+        <select id="nationalityFilter"><option value="all">All Nationalities</option><option>Saudi</option><option>Non-Saudi</option></select>
+        <select id="leaveTypeFilter"><option value="all">All Leave Types</option><option>Annual Leave</option><option>Emergency Leave</option><option>Other</option></select>
+        <input id="monthFilter" type="month" />
       </div>
+    </section>
 
-      <div class="contact-item">
-        <div class="contact-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-          </svg>
-        </div>
-        <div class="contact-item-content">
-          <div class="label">Email</div>
-          <a href="mailto:contact@alialessa.info">contact@alialessa.info</a>
-        </div>
+    <section class="kpis" id="kpis"></section>
+
+    <section class="grid-2">
+      <article class="panel"><h2>Leave Types Distribution</h2><canvas id="pieChart"></canvas></article>
+      <article class="panel"><h2>Leave Usage by Department</h2><canvas id="barDept"></canvas></article>
+    </section>
+
+    <section class="grid-2">
+      <article class="panel"><h2>Monthly Leave Trends</h2><canvas id="lineTrend"></canvas></article>
+      <article class="panel"><h2>Leave Usage by Nationality</h2><canvas id="stackNat"></canvas></article>
+    </section>
+
+    <section class="panel table-wrap">
+      <h2>Employee Leave Register</h2>
+      <div class="legend">
+        <span><span class="icon">⚠️</span>Low balance (≤ 5 days)</span>
+        <span><span class="icon">🌍</span>Non-Saudi Operations + 2 years service = 90-day eligibility rule</span>
       </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th><th>Department</th><th>Nationality</th><th>Years of Service</th><th>Leave Entitlement</th><th>Used Leave</th><th>Remaining</th><th>90-Day Eligibility</th>
+          </tr>
+        </thead>
+        <tbody id="employeeRows"></tbody>
+      </table>
+    </section>
 
-      <div class="contact-item">
-        <div class="contact-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
-          </svg>
-        </div>
-        <div class="contact-item-content">
-          <div class="label">Phone</div>
-          <a href="tel:+966507254625">+966 50 725 4625</a>
-        </div>
-      </div>
-
-      <div class="message-form">
-        <h2>Send Me a Message</h2>
-        <form action="https://formsubmit.co/contact@alialessa.info" method="POST">
-          <input type="hidden" name="_subject" value="New message from alialessa.info">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://alialessa.info/">
-          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required placeholder="Your name" autocomplete="name">
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required placeholder="your@email.com" autocomplete="email">
-          </div>
-
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" required placeholder="Your message..."></textarea>
-          </div>
-
-          <button type="submit" class="submit-btn">Send Message</button>
-        </form>
-      </div>
-
-      <div class="social-links">
-        <a class="social-link" href="mailto:contact@alialessa.info" aria-label="Email" title="Email">
-          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 3.8-8 5-8-5V6l8 5 8-5v1.8Z"/></svg>
-        </a>
-        <a class="social-link" href="https://wa.me/966507254625" aria-label="WhatsApp" title="WhatsApp">
-          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.7 14.8L2 22l5.4-1.3A10 10 0 1 0 12 2Zm0 2a8 8 0 1 1-3.9 15l-.3-.1l-2.6.6l.6-2.5l-.1-.3A8 8 0 0 1 12 4Zm-3.2 4.5c.2 0 .5 0 .8.6c.3.6 1 1.5 1.1 1.6c.1.1.2.3.1.5c-.1.2-.2.3-.4.5c-.2.2-.3.3-.1.6c.2.3.8 1.3 1.9 2.1c1.3.9 2.3 1.2 2.6 1c.3-.2.4-.5.6-.8c.2-.3.3-.4.6-.3c.2.1 1.6.8 1.9.9c.3.1.5.3.5.5c0 .2.1 1.2-.7 1.9c-.7.7-1.6.8-2.7.7c-1.2-.1-2.6-.7-4.2-1.7c-1.6-1-2.8-3-3.2-3.5c-.4-.6-.8-1.6-.9-2.1c-.1-.5 0-1 .2-1.3c.2-.3.6-.5.8-.6Z"/></svg>
-        </a>
-        <a class="social-link" href="https://www.linkedin.com/in/ali-alessa-313a85170/" aria-label="LinkedIn" title="LinkedIn">
-          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.6h.1c.5-.9 1.7-1.9 3.5-1.9C20 8.7 21 11 21 14.2V21h-4v-6c0-1.5 0-3.4-2.1-3.4c-2.1 0-2.4 1.6-2.4 3.3V21H9V9Z"/></svg>
-        </a>
-      </div>
-
-      <footer>
-        <p>&copy; <span id="year"></span> ALI ALESSA</p>
-      </footer>
-    </div>
-  </div>
+    <section class="panel insights">
+      <h2>Summary Insights</h2>
+      <ul id="insights"></ul>
+    </section>
+  </main>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const employees = [
+      {name:'Ahmed Saleh',department:'Operations',nationality:'Saudi',service:4,annualUsed:14,emergencyUsed:2,otherUsed:1},
+      {name:'Ravi Kumar',department:'Operations',nationality:'Non-Saudi',service:2.4,annualUsed:11,emergencyUsed:1,otherUsed:4},
+      {name:'Mohammed Ali',department:'Production',nationality:'Saudi',service:6,annualUsed:18,emergencyUsed:0,otherUsed:2},
+      {name:'John Dela Cruz',department:'Production',nationality:'Non-Saudi',service:5.2,annualUsed:20,emergencyUsed:3,otherUsed:2},
+      {name:'Fatimah Nasser',department:'Quality',nationality:'Saudi',service:1.5,annualUsed:7,emergencyUsed:1,otherUsed:0},
+      {name:'Hassan Omar',department:'Maintenance',nationality:'Non-Saudi',service:3.1,annualUsed:13,emergencyUsed:2,otherUsed:2},
+      {name:'Sara Alharbi',department:'HR',nationality:'Saudi',service:8,annualUsed:22,emergencyUsed:1,otherUsed:1},
+      {name:'Bilal Khan',department:'Operations',nationality:'Non-Saudi',service:1.8,annualUsed:8,emergencyUsed:2,otherUsed:0},
+      {name:'Noura Fahad',department:'Logistics',nationality:'Saudi',service:5.6,annualUsed:16,emergencyUsed:0,otherUsed:3},
+      {name:'Daniel Reyes',department:'Operations',nationality:'Non-Saudi',service:7.3,annualUsed:24,emergencyUsed:1,otherUsed:3}
+    ];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-    (function(){
-      var canvas = document.getElementById('bg-canvas');
-      var ctx = canvas.getContext('2d');
-      var particles = [];
-      var colors = ['rgba(74,122,181,','rgba(107,159,212,','rgba(138,142,154,'];
-      var count = 60;
-      var connectDist = 140;
+    const annualEntitlement = s => s < 5 ? 21 : 30;
+    const isLongLeaveEligible = e => e.department === 'Operations' && e.nationality === 'Non-Saudi' && e.service >= 2;
+    const dateNow = new Date();
+    document.getElementById('asOf').textContent = dateNow.toLocaleDateString('en-GB');
+    document.getElementById('monthFilter').value = `${dateNow.getFullYear()}-${String(dateNow.getMonth()+1).padStart(2,'0')}`;
 
-      var resizeTimer;
-      function resize(){
-        var oldW = canvas.width, oldH = canvas.height;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        if(oldW && oldH){
-          for(var k = 0; k < particles.length; k++){
-            particles[k].x *= canvas.width / oldW;
-            particles[k].y *= canvas.height / oldH;
-          }
-        }
-      }
-      resize();
-      window.addEventListener('resize', function(){ clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 100); });
+    const deptSelect = document.getElementById('departmentFilter');
+    [...new Set(employees.map(e => e.department))].forEach(d => {
+      const op = document.createElement('option'); op.value = d; op.textContent = d; deptSelect.appendChild(op);
+    });
 
-      function Particle(){
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
-        this.r = Math.random() * 2.5 + 1;
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-        this.alpha = Math.random() * 0.5 + 0.3;
-      }
+    let charts = {};
 
-      for(var i = 0; i < count; i++){
-        particles.push(new Particle());
-      }
+    function filteredData(){
+      const d = deptSelect.value, n = document.getElementById('nationalityFilter').value;
+      return employees.filter(e => (d==='all' || e.department===d) && (n==='all' || e.nationality===n));
+    }
 
-      function animate(){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function render(){
+      const rows = document.getElementById('employeeRows'); rows.innerHTML = '';
+      const data = filteredData();
+      let totalAnnualUsed = 0, totalRemaining = 0;
 
-        for(var i = 0; i < particles.length; i++){
-          var p = particles[i];
-          p.x += p.vx;
-          p.y += p.vy;
+      data.forEach(e => {
+        const ent = annualEntitlement(e.service);
+        const used = e.annualUsed + e.emergencyUsed + e.otherUsed;
+        const remain = ent - e.annualUsed;
+        totalAnnualUsed += e.annualUsed; totalRemaining += remain;
+        const tr = document.createElement('tr');
+        if (isLongLeaveEligible(e)) tr.classList.add('highlight');
+        tr.innerHTML = `<td>${e.name}</td><td>${e.department}</td><td>${e.nationality}</td><td>${e.service.toFixed(1)}</td><td>${ent} days</td><td>${used} days</td><td class="${remain<=5?'low':''}">${remain} days</td><td><span class="pill ${isLongLeaveEligible(e)?'ok':'no'}">${isLongLeaveEligible(e)?'Eligible':'Not Eligible'}</span></td>`;
+        rows.appendChild(tr);
+      });
 
-          if(p.x < 0) p.x = canvas.width;
-          if(p.x > canvas.width) p.x = 0;
-          if(p.y < 0) p.y = canvas.height;
-          if(p.y > canvas.height) p.y = 0;
+      const onLeaveNow = Math.max(1, Math.round(data.length * 0.12));
+      document.getElementById('kpis').innerHTML = `
+        <article class="panel kpi"><h3>Total Employees</h3><div class="v">${data.length}</div><div class="i">Filtered scope</div></article>
+        <article class="panel kpi"><h3>Employees on Leave Now</h3><div class="v">${onLeaveNow}</div><div class="i">Current active leave</div></article>
+        <article class="panel kpi"><h3>Total Annual Leave Used</h3><div class="v">${totalAnnualUsed}</div><div class="i">Days used this year</div></article>
+        <article class="panel kpi"><h3>Remaining Balance (Overall)</h3><div class="v">${totalRemaining}</div><div class="i">Annual leave days left</div></article>`;
 
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = p.color + p.alpha + ')';
-          ctx.fill();
+      const leaveTypeTotals = data.reduce((acc,e)=>{acc.annual+=e.annualUsed;acc.emergency+=e.emergencyUsed;acc.other+=e.otherUsed;return acc},{annual:0,emergency:0,other:0});
+      const byDept = Object.entries(data.reduce((a,e)=>{a[e.department]=(a[e.department]||0)+e.annualUsed+e.emergencyUsed+e.otherUsed;return a;},{}));
+      const saud = data.filter(e=>e.nationality==='Saudi').reduce((a,e)=>({annual:a.annual+e.annualUsed,emergency:a.emergency+e.emergencyUsed,other:a.other+e.otherUsed}),{annual:0,emergency:0,other:0});
+      const non = data.filter(e=>e.nationality==='Non-Saudi').reduce((a,e)=>({annual:a.annual+e.annualUsed,emergency:a.emergency+e.emergencyUsed,other:a.other+e.otherUsed}),{annual:0,emergency:0,other:0});
+      const trend = months.map((_,i)=> Math.round((leaveTypeTotals.annual+leaveTypeTotals.emergency+leaveTypeTotals.other) * (0.04 + (i%6)*0.02)));
 
-          for(var j = i + 1; j < particles.length; j++){
-            var p2 = particles[j];
-            var dx = p.x - p2.x;
-            var dy = p.y - p2.y;
-            var dist = Math.sqrt(dx * dx + dy * dy);
-            if(dist < connectDist){
-              var opacity = (1 - dist / connectDist) * 0.15;
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = p.color + opacity + ')';
-              ctx.lineWidth = 0.8;
-              ctx.stroke();
-            }
-          }
-        }
+      Object.values(charts).forEach(c=>c.destroy());
+      charts.pie = new Chart(document.getElementById('pieChart'), {type:'pie',data:{labels:['Annual Leave','Emergency Leave','Other'],datasets:[{data:[leaveTypeTotals.annual,leaveTypeTotals.emergency,leaveTypeTotals.other],backgroundColor:['#5ea7f2','#93c5fd','#cbd5e1']} ]}});
+      charts.dept = new Chart(document.getElementById('barDept'), {type:'bar',data:{labels:byDept.map(x=>x[0]),datasets:[{label:'Leave Days',data:byDept.map(x=>x[1]),backgroundColor:'#60a5fa'}]},options:{plugins:{legend:{display:false}}}});
+      charts.line = new Chart(document.getElementById('lineTrend'), {type:'line',data:{labels:months,datasets:[{label:'Total Leave Days',data:trend,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.2)',fill:true,tension:.35}]}});
+      charts.stack = new Chart(document.getElementById('stackNat'), {type:'bar',data:{labels:['Saudi','Non-Saudi'],datasets:[{label:'Annual',data:[saud.annual,non.annual],backgroundColor:'#60a5fa'},{label:'Emergency',data:[saud.emergency,non.emergency],backgroundColor:'#93c5fd'},{label:'Other',data:[saud.other,non.other],backgroundColor:'#cbd5e1'}]},options:{scales:{x:{stacked:true},y:{stacked:true}}}});
 
-        requestAnimationFrame(animate);
-      }
-      animate();
-    })();
+      const maxDept = byDept.sort((a,b)=>b[1]-a[1])[0];
+      const upcoming = employees.filter(e=>e.department==='Operations'&&e.nationality==='Non-Saudi'&&e.service<2&&e.service>=1.5);
+      document.getElementById('insights').innerHTML = `
+        <li><strong>${maxDept ? maxDept[0] : 'N/A'}</strong> currently shows the highest leave usage in selected filters.</li>
+        <li><strong>${data.filter(e=>annualEntitlement(e.service)-e.annualUsed<=5).length}</strong> employees have low annual leave balance and may need planning support.</li>
+        <li><strong>${data.filter(isLongLeaveEligible).length}</strong> Operations non-Saudi employees are currently eligible for the 90-day leave rule.</li>
+        <li><strong>${upcoming.length}</strong> employees are approaching 2-year service and may soon become eligible for long leave.</li>`;
+    }
+
+    ['departmentFilter','nationalityFilter','leaveTypeFilter','monthFilter'].forEach(id=>document.getElementById(id).addEventListener('change',render));
+    render();
   </script>
 </body>
 </html>
